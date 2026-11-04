@@ -1,0 +1,1348 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Перекуп Авито</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{--bg:#eef1f6;--card:#fff;--tx:#141922;--mut:#6c778a;--ac:#2f7bff;--ac2:#6a5cff;--ok:#16a05a;--bad:#e5484d;--warn:#e89a1a;--bd:#e3e8f0;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1117;--card:#171d27;--tx:#eaf0f8;--mut:#8b97aa;--bd:#263040;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d1117;--card:#171d27;--tx:#eaf0f8;--mut:#8b97aa;--bd:#263040;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{padding-bottom:84px;min-height:100vh}
+.top{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;padding:18px 16px 16px;border-radius:0 0 26px 26px;box-shadow:0 8px 24px rgba(47,123,255,.25)}
+.top small{opacity:.8;font-size:12px}
+.top .bal{font-size:30px;font-weight:800;letter-spacing:-.5px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.pill{background:rgba(255,255,255,.18);padding:5px 10px;border-radius:99px;font-size:13px;font-weight:600;margin-left:6px;white-space:nowrap}
+.ev{margin:12px 12px 0;padding:10px 12px;border-radius:14px;background:rgba(232,154,26,.15);color:var(--warn);font-weight:600;font-size:13px}
+.c{background:var(--card);border-radius:18px;padding:14px;margin:10px 12px;box-shadow:0 2px 10px rgba(20,30,50,.06);border:1px solid var(--bd)}
+.c h3{margin:0 0 4px;font-size:16px}
+.mut{color:var(--mut);font-size:13px}
+.price{font-weight:800;font-size:18px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.ch{font-size:12px;padding:4px 9px;border-radius:99px;background:var(--bg);color:var(--mut);font-weight:600}
+.ch.ok{background:rgba(22,160,90,.14);color:var(--ok)}
+.ch.bad{background:rgba(229,72,77,.14);color:var(--bad)}
+.ch.on{background:var(--ac);color:#fff}
+.b{border:0;border-radius:12px;padding:10px 14px;font:inherit;font-weight:700;background:var(--ac);color:#fff;cursor:pointer}
+.b.g{background:var(--bg);color:var(--tx)}
+.b.ok{background:var(--ok)}
+.b.bad{background:var(--bad)}
+.b:disabled{opacity:.45}
+.b:active{transform:scale(.97)}
+.acts{display:flex;gap:8px;margin-top:10px}.acts .b{flex:1}
+.flt{display:flex;gap:6px;padding:12px 12px 0;overflow-x:auto}.flt .ch{padding:7px 13px;font-size:13px;cursor:pointer;white-space:nowrap}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--bd);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));z-index:5}
+nav button{flex:1;border:0;background:none;color:var(--mut);font:inherit;font-size:11px;font-weight:600;padding:4px 0;position:relative;cursor:pointer}
+nav button i{display:block;font-style:normal;font-size:21px}
+nav button.on{color:var(--ac)}
+nav em{position:absolute;top:0;right:22%;background:var(--bad);color:#fff;font-style:normal;font-size:10px;border-radius:99px;padding:1px 5px}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:20;display:flex;align-items:flex-end}
+.sh{background:var(--card);width:100%;max-height:82vh;overflow:auto;border-radius:24px 24px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px))}
+.df{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--bd);gap:8px}
+.toast{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:14px;font-weight:600;z-index:30;max-width:90%;text-align:center}
+.empty{text-align:center;color:var(--mut);padding:40px 20px}
+.st{display:grid;grid-template-columns:1fr 1fr;gap:8px}.st div{background:var(--bg);border-radius:14px;padding:10px}.st b{display:block;font-size:17px}
+.bar{height:8px;background:var(--bg);border-radius:9px;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2))}
+.dk{margin:10px 12px;border-radius:20px;overflow:hidden;background:linear-gradient(160deg,#10285a,#4a1f8f 60%,#7b2d8e);color:#fff;min-height:62vh;display:flex;flex-direction:column;box-shadow:0 8px 24px rgba(40,30,120,.35)}
+.dki{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:20px 12px;align-content:start}
+.dki button{border:0;background:none;color:#fff;font:inherit;font-size:12px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 2px;border-radius:14px;position:relative;cursor:pointer}
+.dki button:active{background:rgba(255,255,255,.15)}
+.dki i{font-style:normal;font-size:34px;background:rgba(255,255,255,.14);width:60px;height:60px;border-radius:16px;display:flex;align-items:center;justify-content:center}
+.dki em{position:absolute;top:4px;right:calc(50% - 38px);background:var(--bad);font-style:normal;font-size:10px;border-radius:99px;padding:1px 6px}
+.win{flex:1;margin:10px;border-radius:14px;overflow:hidden;background:var(--card);color:var(--tx);display:flex;flex-direction:column}
+.win.dark{background:#0a0a10;color:#e8e8ee}
+.win.dark .mut{color:#9aa0b4}.win.dark .ch:not(.ok):not(.bad){background:#1d1d2a;color:#aab}.win.dark .df{border-color:#23232f}
+.wt{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:rgba(0,0,0,.16);font-weight:700;font-size:13px}
+.wt button{border:0;background:var(--bad);color:#fff;border-radius:8px;width:28px;height:24px;font-weight:800;cursor:pointer}
+.wb{padding:10px;overflow:auto;max-height:62vh}
+.tbar{display:flex;justify-content:space-between;gap:8px;padding:9px 14px;background:rgba(0,0,0,.35);font-size:12px;font-weight:600}
+.term{background:#05080c;color:#4ade80;font:12px/1.5 ui-monospace,Menlo,monospace;padding:10px;border-radius:10px;margin:8px 0;min-height:96px;white-space:pre-wrap}
+.bmc{background:#14141c;border:1px solid #2a2a38;border-radius:14px;padding:12px;margin:8px 0}
+.bmc .price{color:#ff6b6b}
+.th{position:relative;flex:none;width:92px;height:114px;padding:6px;border-radius:14px;background:radial-gradient(circle at 50% 35%,#eef1f7,#c5ccda);cursor:pointer}
+.th svg{width:100%;height:100%;display:block}
+.th span{position:absolute;right:4px;bottom:3px;font-size:11px;background:rgba(0,0,0,.5);color:#fff;border-radius:8px;padding:0 5px}
+.vw{perspective:900px;height:320px;margin:8px 0;border-radius:18px;background:radial-gradient(circle at 50% 40%,#eef1f7,#bcc4d4);touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab}
+.vi{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.3,.7,.2,1)}
+.vi.dr{transition:none}
+.vf{position:absolute;inset:0;padding:10px;backface-visibility:hidden;-webkit-backface-visibility:hidden;pointer-events:none}
+.vb{transform:rotateY(180deg)}
+.vf svg{width:100%;height:100%;display:block;filter:drop-shadow(0 10px 12px rgba(0,0,0,.35))}
+.pul{animation:pul .9s ease-in-out infinite alternate}
+@keyframes pul{to{opacity:.2}}
+.vw.p3{touch-action:none;overflow:hidden}
+.p3 .vi{width:150px;height:308px;margin:6px auto 0}
+.p3 .vf{padding:0;transform:translateZ(9px)}
+.p3 .vb{transform:rotateY(180deg) translateZ(9px)}
+.wl{position:absolute;left:0;top:0;height:18px}
+#rf{position:fixed;inset:0;z-index:40;background:#050806;color:#e9fff0;font:14px/1.4 ui-monospace,Menlo,monospace;overflow:auto;padding:calc(12px + env(safe-area-inset-top,0px)) 14px calc(16px + env(safe-area-inset-bottom,0px))}
+#rf h4{margin:14px 0 4px;font-size:18px}#rf p{margin:0 0 10px;color:#9fb3a6}#rf b{color:#e9fff0}
+.rfh{display:flex;justify-content:space-between;align-items:center;color:#7dff9b;font-weight:700}
+.rfh button{border:0;background:#1a211d;color:#e9fff0;border-radius:10px;width:34px;height:34px;font-size:16px}
+.rfp{display:block;height:200px;margin:6px auto;background:#0a0f0c;border-radius:16px;width:100%}
+.rfbar{height:10px;border-radius:9px;background:#14201a;margin:8px 0;overflow:hidden}.rfbar i{display:block;height:100%;width:0;background:#7dff9b}
+.rfm{text-align:center;font-weight:800;color:#ffd24a;margin:6px 0 10px;min-height:20px}
+.rfbt{display:flex;gap:10px;margin:6px 0}.rfbt button,.rfwf button{flex:1;border:1px solid #2a3a30;background:#0d1511;color:#e9fff0;border-radius:14px;padding:16px 8px;font:inherit;font-weight:800}
+.rfbt button.on,.rfwf button.on{background:#7dff9b;color:#06140b;box-shadow:0 0 18px rgba(125,255,155,.4)}
+.rfs{text-align:center;color:#6c8174;font-size:12px;margin-bottom:8px}
+.rfid{text-align:center;font-size:30px;font-weight:800;color:#7dff9b;padding:16px 0}.rfid small{display:block;font-size:14px;color:#9fb3a6;font-weight:400}
+.rfe{background:#b8392f;color:#fff;border-radius:14px;padding:10px 12px;font-weight:800;margin:8px 0;text-align:center}
+.rfban{background:#10201a;border-radius:14px;padding:8px;text-align:center;font-weight:800;margin-bottom:6px}
+.rff{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;border:1px solid #22302a;background:#0b110e;color:#e9fff0;border-radius:14px;padding:14px 10px;margin:6px 0;font:12px ui-monospace,Menlo,monospace}
+.rff span{font-weight:800;white-space:nowrap}.rff .ok{color:#7dff9b}.rff .bad{color:#ff7b7b}.rff .wr{color:#ffb347}
+.rfwf{background:#f4f5f8;color:#111;border-radius:18px;padding:12px;position:relative}.rfwf>b{display:block;color:#111;margin-bottom:8px;font-family:system-ui,sans-serif}
+.rfwf button{display:block;width:100%;background:#fff;color:#111;border:0;border-bottom:1px solid #e3e5ea;border-radius:8px;padding:11px 8px;margin:0;text-align:left;font-weight:600}
+.rfwf button.on{background:#7dff9b;box-shadow:none}
+.rfst{position:static;background:#ffdc5e;color:#000;padding:10px 12px;border-radius:6px;margin:0 0 10px;font:700 14px/1.5 system-ui,sans-serif;box-shadow:0 4px 10px rgba(0,0,0,.25)}#rf .rfst,#rf .rfst *{color:#000}.rfst b{font-size:17px;font-weight:900;letter-spacing:.3px}#rf .rfwf>b{color:#000}.rfst small{display:block;font-weight:600;font-size:12px;opacity:.8}
+#rfin{width:100%;margin-top:10px;padding:13px;border-radius:12px;border:1px solid #2a3a30;background:#0d1511;color:#e9fff0;font:inherit}
+.rfl{background:#05080c;border:1px solid #1a251e;border-radius:12px;padding:10px;margin:12px 0 0;color:#4ade80;font:12px/1.5 ui-monospace,Menlo,monospace;white-space:pre-wrap;min-height:70px}
+
+/* --- иконки, профиль, ремонт --- */
+.toast{z-index:60}
+.top{position:relative}
+.pb{position:absolute;top:14px;right:14px;width:42px;height:42px;border-radius:50%;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.2);color:#fff;display:grid;place-items:center;cursor:pointer;padding:0}
+.pb.on{background:#fff;color:var(--ac)}
+.pb svg,nav button i svg{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+.pb svg{width:22px;height:22px;stroke-width:2}
+nav button i{display:grid;place-items:center;width:50px;height:30px;margin:0 auto 2px;border-radius:15px;transition:.2s}
+nav button i svg{width:23px;height:23px;stroke-width:1.9}
+nav button.on i{background:rgba(47,123,255,.15)}
+.dki i.ic{width:62px;height:62px;border-radius:19px;background:var(--g);box-shadow:0 8px 16px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.4)}
+.dki i.ic svg{width:30px;height:30px;fill:none;stroke:#fff;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.ic.bm{--g:linear-gradient(145deg,#5a5f78,#15161e)}.ic.ul{--g:linear-gradient(145deg,#34d399,#059669)}.ic.up{--g:linear-gradient(145deg,#60a5fa,#2563eb)}.ic.bd{--g:linear-gradient(145deg,#fbbf24,#ea580c)}.ic.pg{--g:linear-gradient(145deg,#f472b6,#9333ea)}
+#rp{position:fixed;inset:0;z-index:40;background:radial-gradient(120% 70% at 50% 0,#1c2a47 0,#0b0f16 62%);color:#e8edf7;overflow:auto;padding:calc(12px + env(safe-area-inset-top,0px)) 14px calc(16px + env(safe-area-inset-bottom,0px));font:14px/1.4 system-ui,sans-serif}
+.rph{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:16px}
+.rph button{width:36px;height:36px;border:0;border-radius:12px;background:#222a3a;color:#fff;font-size:16px}
+.rpb{display:block;width:100%;margin:8px 0;border:0;border-radius:12px;background:#2f7bff;color:#fff;font:inherit;font-weight:700;padding:12px}.rpb.ok{background:#16a05a}.rpb.g{background:#222a3a}
+.rpm{text-align:center;color:#9aa6bd;margin:4px 0 8px}
+.rpsteps{display:flex;gap:6px;margin:10px 0 2px;font-size:11px;font-weight:700}.rpsteps span{flex:1;text-align:center;padding:6px 2px;border-radius:99px;background:#161d2b;color:#6f7b93}.rpsteps .on{background:#2f7bff;color:#fff}.rpsteps .dn{background:rgba(22,160,90,.2);color:#7dff9b}
+.rpmain{display:flex;gap:14px;align-items:flex-start;margin:14px 0 8px}.rpmain.c{justify-content:center}
+.rpstage{position:relative;flex:0 0 min(48vw,196px);width:min(48vw,196px);isolation:isolate;perspective:900px}
+.rpmain.c .rpstage{flex-basis:min(60vw,230px);width:min(60vw,230px)}
+.rpstage::before{content:"";position:absolute;inset:-12px;border-radius:26px;z-index:-1;background:linear-gradient(#10182a,#0b111b);border:1px solid #1f2a40;box-shadow:0 18px 40px rgba(0,0,0,.5)}
+.rpstage svg{display:block;width:100%;filter:drop-shadow(0 10px 14px rgba(0,0,0,.55))}
+.rpint.u{position:absolute;inset:0}.rpint.in{animation:rpin .6s}
+.rplid{position:relative;z-index:2;transform-origin:50% 100%}
+.rplid.glow{animation:rpglow 1.8s ease-in-out infinite alternate}
+.rplid.lift{animation:rplift .75s cubic-bezier(.4,.1,.2,1) forwards;pointer-events:none}
+.rplid.land{animation:rpland .65s cubic-bezier(.3,.1,.2,1) both}
+@keyframes rpglow{to{filter:drop-shadow(0 0 12px rgba(80,160,255,.7))}}
+@keyframes rplift{35%{transform:translateY(-4%) rotateX(22deg) scale(1.05)}100%{transform:translateY(-62%) rotateX(40deg) rotate(-12deg) scale(.88);opacity:0}}
+@keyframes rpland{from{transform:translateY(-62%) rotateX(40deg) rotate(-12deg) scale(.88);opacity:0}65%{opacity:1;transform:translateY(-3%) rotateX(14deg) scale(1.03)}to{transform:none}}
+@keyframes rpin{from{opacity:.3;transform:scale(.96)}}
+.rpside{flex:1;min-width:0}
+.rpcov{display:flex;gap:8px;align-items:center;padding:8px;border-radius:14px;border:1px solid #2c374d;background:#131a27;font-size:12px}.rpcov.bad{border-color:#ff4d4d}.rpcov.good{border-color:#7dff9b}.rpcov.tgt{outline:2px dashed #ffd24a}.rpcov.hov{background:#2a2410}
+.rpcf{flex:none;width:40px}.rpcf svg{width:100%;display:block}
+.rpcov small,.rpt small{display:block;color:#9aa6bd;font-size:11px;font-weight:400}
+.rpth{margin:12px 2px 6px;font-weight:800}.rpth small{display:block;color:#9aa6bd;font-weight:500;font-size:11px}
+.rptray{display:flex;flex-direction:column;gap:6px}.rpe{color:#7dff9b;padding:10px;text-align:center}
+.rpt{display:flex;gap:8px;align-items:center;padding:8px;border-radius:12px;background:linear-gradient(#222c42,#18202f);border:1px solid #3a4766;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;font-size:12px}
+.rpt i{font-style:normal;font-size:20px}.rpt span{flex:1;min-width:0}.rpt em{font-style:normal;font-weight:800;color:#ffd24a;white-space:nowrap}
+.rpt.lift{opacity:.3}.rpg{position:fixed;z-index:80;width:190px;pointer-events:none;transform:translate(-50%,-60%) scale(1.06) rotate(-3deg);box-shadow:0 14px 30px rgba(0,0,0,.6)}
+.rpp{cursor:pointer;transform-box:fill-box;transform-origin:center}
+.rpp .lb{fill:#e3e8f4;font:700 8.5px system-ui,sans-serif;paint-order:stroke;stroke:rgba(0,0,0,.7);stroke-width:2px;pointer-events:none}
+.rpp .bdov,.rpp .gd,.rpp .tg{display:none}.rpp.bad .bdov{display:block;animation:pul .8s ease-in-out infinite alternate}.rpp.good .gd{display:block}
+.rpp .tg{fill:none;stroke:#ffd24a;stroke-width:2.5;stroke-dasharray:6 4}.rpp.tgt .tg{display:block;animation:rpdash .6s linear infinite}
+.rpp.hov{filter:drop-shadow(0 0 7px #ffd24a)}.rpp.sel>rect:first-child{stroke:#ffd24a;stroke-width:2.5}
+@keyframes rpdash{to{stroke-dashoffset:-20}}
+.rpp.swap{animation:rpswap .75s}.rpp.shake{animation:rpsh .45s}
+@keyframes rpswap{0%{transform:none;opacity:1}35%{transform:translateY(-44px);opacity:0}65%{transform:translateY(44px);opacity:0}100%{transform:none;opacity:1}}
+@keyframes rpsh{25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}}
+.rpn{background:#131a27;border:1px solid #24304a;border-radius:14px;padding:12px;margin:8px 0}
+
+/* --- 3D-ремонт: ноутбук / ПК / приставка --- */
+.rd3{height:min(330px,82vw);perspective:900px;display:flex;align-items:center;justify-content:center;touch-action:none;cursor:grab;margin:8px 0;border-radius:18px;background:radial-gradient(circle at 50% 45%,#1c2a47,#0b0f16 75%);border:1px solid #1f2a40;user-select:none;-webkit-user-select:none}
+.rd3.o{touch-action:pan-y;cursor:default}
+.rdm{position:relative;transform-style:preserve-3d}
+.rdm>div{position:absolute}
+.rdw{pointer-events:none;background-image:linear-gradient(90deg,rgba(255,255,255,.18),rgba(0,0,0,.28))}
+.rdbed{left:0;top:0;width:100%;height:100%;background:linear-gradient(135deg,#0c2a24,#0a1a2a);border-radius:12px;border:2px solid #1f2a40;box-shadow:inset 0 0 24px #000}
+.rdcv{left:0;top:0;width:100%;height:100%;border-radius:14px;overflow:hidden;transform:translateZ(var(--z));box-shadow:0 0 0 1px rgba(0,0,0,.4)}
+.rdsv{position:absolute;width:320px;height:240px;pointer-events:none}.rdsv svg{width:100%;height:100%;display:block}
+.k-lift .rdcv{--o:translateZ(var(--z)) translate3d(0,-85%,70px) rotateX(35deg);--oo:0}
+.k-hood .rdcv{transform-origin:50% 0;--o:translateZ(var(--z)) rotateX(82deg);--oo:.92}
+.k-door .rdcv{transform-origin:0 50%;--o:translateZ(var(--z)) rotateY(-112deg);--oo:1}
+.rdcv.pop{animation:rdo .8s cubic-bezier(.4,.1,.2,1) forwards;pointer-events:none}
+.rdcv.off{transform:var(--o);opacity:var(--oo);pointer-events:none}
+.rdcv.land{animation:rdl .7s cubic-bezier(.3,.1,.2,1) both}
+@keyframes rdo{to{transform:var(--o);opacity:var(--oo)}}
+@keyframes rdl{from{transform:var(--o);opacity:var(--oo)}}
+.rds{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border:0;padding:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#eef1f8,#7d869a 60%,#4a5266);box-shadow:0 2px 4px rgba(0,0,0,.6);cursor:pointer;outline:2px solid rgba(255,210,74,.75);outline-offset:3px}
+.rds::before,.rds::after{content:"";position:absolute;left:5px;right:5px;top:12px;height:2px;background:#2a3040;border-radius:1px}.rds::after{transform:rotate(90deg)}
+.rds.out{animation:rdso .45s forwards;pointer-events:none}
+@keyframes rdso{to{transform:rotate(540deg) scale(1.8);opacity:0}}
+.rds.hole,.rds:disabled{background:radial-gradient(#05070b 45%,#2a3040);box-shadow:inset 0 1px 3px #000;cursor:default;outline:0}
+.rds.hole::before,.rds.hole::after,.rds:disabled::before,.rds:disabled::after{display:none}
+.rdp{position:absolute;border-radius:8px;border:1.5px solid #2f3a52;background:linear-gradient(#1b2438,#121a29);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#cfd8ea;cursor:pointer;overflow:hidden;text-align:center}
+.rdp i{font-style:normal;font-size:20px;line-height:1}.rdp b{font:700 8.5px/1.1 system-ui,sans-serif;margin-top:2px}
+.rdp.rdx{pointer-events:none;opacity:.7}
+.rdp.bad{border-color:#ff4d4d;background:linear-gradient(#4a1c22,#2a1016);animation:rdb .8s ease-in-out infinite alternate}
+@keyframes rdb{to{box-shadow:0 0 14px 2px #ff4d4d;filter:brightness(1.4)}}
+.rdp.good{border-color:#7dff9b}.rdp.good::after{content:"✓";position:absolute;right:3px;top:1px;color:#7dff9b;font-weight:800;font-size:11px}
+.rdp.sel{border-color:#ffd24a}.rdp.tgt{outline:2px dashed #ffd24a;outline-offset:2px}.rdp.hov{box-shadow:0 0 10px #ffd24a}
+.vw.p4{touch-action:none;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.p4 .vi{flex:none}
+.b3{position:absolute;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;pointer-events:none}
+.b3 .cw{position:absolute;left:0;top:0;width:320px;height:240px;transform-origin:0 0}
+.b3 .cw svg{display:block;width:320px;height:240px}
+.b3.sd{background-image:linear-gradient(90deg,rgba(255,255,255,.18),rgba(0,0,0,.3))}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>/*dbg*/
+window.addEventListener('error',function(e){if(!e.lineno||e.message==='Script error.')return;try{var d=document.createElement('div');d.style.cssText='position:fixed;left:0;right:0;top:0;z-index:99999;background:#b8392f;color:#fff;padding:10px;font:12px monospace;white-space:pre-wrap';d.textContent='JS-ошибка: '+e.message+' (строка '+e.lineno+')';document.body.appendChild(d)}catch(_){}});
+</script>
+
+<script>
+const ICP={search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',box:'<path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>',chat:'<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/>',case:'<rect x="3" y="8" width="18" height="12" rx="2"/><path d="M3 13h18M8 8V5h8v3"/>',pc:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',bm:'<path d="M5 21V10a7 7 0 0 1 14 0v11l-3-2-2 2-2-2-2 2-2-2z"/><circle cx="9.5" cy="10" r="1"/><circle cx="14.5" cy="10" r="1"/>',ul:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/>',up:'<rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/>',bd:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9z"/>',pg:'<rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V5M9 13v1M15 13v1M9 17h6"/><circle cx="12" cy="4" r="1"/>'};
+const IC=k=>`<svg viewBox="0 0 24 24">${ICP[k]||''}</svg>`;
+const I={};
+// [название, цена, категория(p/c/r), мин. уровень, слот (для деталей), тир (для деталей)]
+const ad=(k,n,p,c,l,s,t)=>{I[k]=[n,p,c,l,s,t]};
+// Телефоны, ур. 1
+[['iphone12','📱 iPhone 12',29000],['iphone14','📱 iPhone 14',47000],['iphone15','📱 iPhone 15',62000],['a54','📱 Samsung A54',24000],['s23','📱 Samsung S23',44000],['redmi','📱 Redmi Note 13',19000],['pixel','📱 Google Pixel 8',41000],['ip11l','🔒 iPhone 11 (заблок.)',22000],['ip13l','🔒 iPhone 13 (заблок.)',41000],['ip14l','🔒 iPhone 14 Pro (заблок.)',66000]].forEach(x=>ad(x[0],x[1],x[2],'p',1));
+
+// ===== Новые телефоны: [название, цена ₽, мин. уровень] =====
+const PKEY=(p,n)=>p+'_'+n.toLowerCase().replace(/[^a-z0-9]/g,'');
+[['Tecno Spark Go 2024',6500,1],['Tecno Spark 20 Pro',11500,1],['Tecno Spark 30 Pro',14500,1],['Tecno Pova 6 Pro',19500,1],['Tecno Camon 30',22500,2],['Tecno Phantom X2 Pro',34000,2],['Tecno Phantom V Fold 2',68000,3],
+ ['Infinix Smart 8',5500,1],['Infinix Hot 40 Pro',10500,1],['Infinix Note 40 Pro',17500,1],['Infinix Note 50 Pro',21000,2],['Infinix Zero 30 5G',21500,2],['Infinix Zero 40 5G',25000,2],['Infinix GT 20 Pro',27000,2],
+ ['Nokia 105 4G',1500,1],['Nokia 110 4G',2200,1],['Nokia 225 4G',3500,1],['Nokia 3310',4000,1],['Nokia 8110 4G',6500,1],['Nokia C32',6500,1],['Nokia G42 5G',11500,1],['Nokia XR21',22000,2],
+ ['Redmi 13C',8500,1],['Redmi Note 12',15000,1],['Poco X6 Pro',24500,1],['Poco F6',33500,2],['Xiaomi 13T',34000,2],['Xiaomi 14',54000,3],
+ ['realme C55',10500,1],['realme 12 Pro+',31000,2],['Honor X8b',17000,1],['Honor Magic6 Pro',62000,3],['Huawei nova 12',25500,2],['Huawei P60 Pro',62000,3],
+ ['Oppo Reno 11',28500,2],['vivo V30',31500,2],['Motorola Moto G54',12500,1],['OnePlus 12',52500,3],
+ ['Samsung A15',12500,1],['Samsung A25',19500,1],['Samsung A35',27500,2],['Samsung S24',48500,2],['Samsung S24 Ultra',82000,3],
+ ['Sony Xperia 1 V',58000,3],['ASUS ROG Phone 8',62500,3],['Nothing Phone (2)',38500,2],['ZTE Blade A54',6500,1],['itel A60',5000,1],['BQ 5060L Basic',4200,1],['Philips Xenium E2101',2500,1]
+].forEach(x=>ad(PKEY('p',x[0]),'📱 '+x[0],x[1],'p',x[2]));
+// ===== Заблокированные iPhone (цена = стоимость после разблокировки) =====
+const BL=[['iPhone 8',9000,1],['iPhone X',14000,1],['iPhone XR',15500,1],['iPhone SE',11000,1],['iPhone XS',17500,1],
+ ['iPhone 11 Pro',26000,2],['iPhone 11 Pro Max',30000,2],['iPhone XS Max',20500,2],['iPhone 12 mini',24000,2],['iPhone 12',31000,2],['iPhone 12 Pro',40000,2],
+ ['iPhone 12 Pro Max',46000,3],['iPhone 13 mini',34000,3],['iPhone 13 Pro',52000,3],['iPhone 13 Pro Max',58000,3],['iPhone 14',47000,3],['iPhone 14 Plus',51000,3],
+ ['iPhone 14 Pro Max',74000,4],['iPhone 15',62000,4],['iPhone 15 Plus',68000,4],['iPhone 15 Pro',82000,4],
+ ['iPhone 15 Pro Max',98000,5],['iPhone 16',85000,5],['iPhone 16 Pro',108000,5],['iPhone 16 Pro Max',128000,6]
+].map(x=>[PKEY('l',x[0]),'🔒 '+x[0]+' (заблок.)',x[1],x[2]]);
+BL.forEach(x=>ad(x[0],x[1],x[2],'p',x[3]));
+// бренд на задней крышке (для оригиналов и подделок)
+const BRD=[[/Tecno/,'TECNO','TECN0'],[/Infinix/,'Infinix','lnfinix'],[/Nokia/,'NOKIA','NOK1A'],[/Poco/,'POCO','P0CO'],[/Xiaomi/,'XIAOMI','XIAOM1'],[/realme/,'realme','rea1me'],[/Honor/,'HONOR','H0NOR'],[/Huawei/,'HUAWEI','HUAWEl'],[/Oppo/,'OPPO','0PPO'],[/vivo/,'vivo','v1vo'],[/Moto/,'moto','mot0'],[/OnePlus/,'OnePlus','0nePlus'],[/Sony/,'SONY','S0NY'],[/ROG/,'ROG','R0G'],[/Nothing/,'NOTHING','N0THING'],[/ZTE/,'ZTE','ZTF'],[/itel/,'itel','ite1'],[/BQ/,'BQ','8Q'],[/Philips/,'PHILIPS','PHILLPS']];
+// Флагманы 200 000 – 1 000 000 ₽: [ключ, название, мин. уровень, [[память ГБ, цена в тыс. ₽]...]]
+[['ip17','iPhone 17',2,[[256,200],[512,235],[1024,280]]],
+ ['ip17p','iPhone 17 Pro',3,[[256,260],[512,305],[1024,360]]],
+ ['ip17pm','iPhone 17 Pro Max',3,[[256,320],[512,375],[1024,440],[2048,540]]],
+ ['ip18p','iPhone 18 Pro',4,[[256,380],[512,445],[1024,520],[2048,640]]],
+ ['ip18pm','iPhone 18 Pro Max',5,[[256,460],[512,540],[1024,640],[2048,780]]],
+ ['ipduo','iPhone Duo',6,[[512,700],[1024,850],[2048,1000]]],
+ ['ipg','iPhone 18 Pro Max Gold Edition',6,[[1024,1100],[2048,1400]]],
+ ['vertu','Vertu Signature Diamond',7,[[512,1800],[1024,2400]]],
+ ['ipcav','Caviar iPhone Duo Platinum',8,[[2048,3500]]]
+].forEach(m=>m[3].forEach(v=>ad(m[0]+'_'+v[0],'📱 '+m[1]+' · '+(v[0]>=1024?v[0]/1024+' ТБ':v[0]+' ГБ'),v[1]*1000,'p',m[2])));
+// Ноутбуки, ур. 4
+[['macbook','💻 MacBook Air',85000],['asus','💻 ASUS VivoBook',44000],['lenovo','💻 Lenovo IdeaPad',39000],['mbp14','💻 MacBook Pro 14 · 1 ТБ',230000],['mbp16','💻 MacBook Pro 16 · 1 ТБ',340000],['mbp16b','💻 MacBook Pro 16 · 4 ТБ',520000],['rog','💻 ASUS ROG Strix SCAR 18',280000],['razer','💻 Razer Blade 18',360000]].forEach(x=>ad(x[0],x[1],x[2],'c',4));
+// Готовые ПК, ур. 8
+[['gaming','🖥 Игровой ПК',105000],['office','🖥 Офисный ПК',27000],['gpc5080','🖥 Игровой ПК · RTX 5080',240000],['gpc5090','🖥 Игровой ПК · RTX 5090',420000],['mstudio','🖥 Mac Studio M5 Ultra',600000],['wks','🖥 Рабочая станция Threadripper',850000]].forEach(x=>ad(x[0],x[1],x[2],'c',8));
+// Элита: дороже 1 000 000 ₽
+[['alien','💻 Alienware Area-51 Extreme Edition',1200000,7],['mpro','🖥 Mac Pro Rack M5 Ultra',1500000,7],['wks2','🖥 Станция 2×Threadripper PRO',2200000,8],['gpusrv','🖥 GPU-сервер 8×RTX PRO 6000',4500000,9]].forEach(x=>ad(x[0],x[1],x[2],'c',x[3]));
+// Смарт-приставки (прошиваются под Алису на своём ПК)
+[['tvmi','📺 Xiaomi Mi Box S',4500,1],['tvsber','📺 SberBox',5500,1],['tvyb','📺 Яндекс ТВ Станция Бейсик',9000,1],['tvyp','📺 Яндекс ТВ Станция Про',16000,2],['tvatv','📺 Apple TV 4K',18000,2],['tvatv2','📺 Apple TV 4K · 128 ГБ',23000,3],['tvshield','📺 NVIDIA Shield TV Pro',26000,3],['tvgold','📺 Caviar Apple TV 4K Gold Edition',140000,5]].forEach(x=>ad(x[0],x[1],x[2],'t',x[3]));
+// Комплектующие, ур. 8: слот, значок, [[ключ, название, цена, тир 1-6]...]
+const PARTS=[
+['cpu','⚙️',[['i5','Core i5-12400F',12000,1],['ryzen5','Ryzen 5 7600',19000,2],['ryzen7','Ryzen 7',29000,3],['i9','Core i9-14900K',52000,4],['r9','Ryzen 9 9950X',68000,5],['tr','Threadripper PRO 7995WX',700000,6]]],
+['gpu','🎮',[['gtx1660','GTX 1660 Super',14000,1],['rtx3060','RTX 3060',29000,2],['rtx4070','RTX 4070',68000,3],['rtx4080','RTX 4080 Super',120000,4],['rtx5090','RTX 5090 32 ГБ',240000,5],['rtxpro','RTX PRO 6000 96 ГБ',850000,6]]],
+['mb','🧷',[['a520','Материнка A520',7000,1],['b650','Материнка B650',16000,2],['z790','Материнка Z790',28000,3],['x870','Материнка X870E',45000,4],['x670x','Материнка X670E Extreme',70000,5],['wrx90','Материнка WRX90 Workstation',220000,6]]],
+['ram','🧩',[['ram16','DDR4 16 ГБ',4500,1],['ram32','DDR5 32 ГБ',12000,2],['ram64','DDR5 64 ГБ',25000,3],['ram128','DDR5 128 ГБ',55000,4],['ram192','DDR5 192 ГБ',110000,5],['ram512','DDR5 ECC 512 ГБ',400000,6]]],
+['ssd','💾',[['ssd512','SSD 512 ГБ',3500,1],['ssd','SSD 1 ТБ',8500,2],['ssd2t','NVMe 2 ТБ',16000,3],['ssd4t','NVMe 4 ТБ',34000,4],['ssd8t','NVMe 8 ТБ',75000,5],['ssd15t','Серверный SSD 15 ТБ',210000,6]]],
+['psu','🔌',[['psu550','Блок питания 550 Вт',4000,1],['psu750','Блок питания 750 Вт',8500,2],['psu850','Блок питания 850 Вт Gold',13000,3],['psu1000','Блок питания 1000 Вт Platinum',20000,4],['psu1200','Блок питания 1200 Вт Titanium',32000,5],['psu1600','Блок питания 1600 Вт Titanium',55000,6]]],
+['case','🗄',[['case0','Корпус офисный',3000,1],['case1','Корпус ATX',7000,2],['case2','Корпус Fractal',14000,3],['case3','Корпус Lian Li O11',22000,4],['case4','Корпус Corsair 7000D',34000,5],['case5','Корпус витрина с СЖО',90000,6]]]];
+PARTS.forEach(g=>g[2].forEach(x=>ad(x[0],g[1]+' '+x[1],x[2],'r',8,g[0],x[3])));
+const KEYS=Object.keys(I);const LK=new Set(['ip11l','ip13l','ip14l',...BL.map(x=>x[0])]);
+I.custom=['🖥 Сборный ПК',0,'c',99];
+const nm=d=>d.nm||I[d.key]?.[0]||'Неизвестное устройство';
+const lab=k=>{const x=I[k];if(x[2]==='t')return'смарт-приставки';if(x[2]==='r')return'комплектующие';if(x[2]==='c')return x[0].startsWith('💻')?'ноутбуки':'ПК';return/iPhone 1[78]|Duo|Vertu|Caviar/.test(x[0])?x[0].replace(/^\S+\s/,'').split(' · ')[0]:'телефоны'};
+const unT=L=>[...new Set(KEYS.filter(k=>I[k][3]===L).map(lab))].join(', ');
+const AK=()=>KEYS.filter(k=>I[k][3]<=lvl());
+const pk=()=>{const p=AK(),a=P(p),b=P(p);return Math.random()<.6&&I[b][1]<I[a][1]?b:a};
+const pkO=()=>P(AK().filter(k=>!LK.has(k)));
+const pcP=()=>Math.min(.95,.5+.09*S.pc),pcT=()=>Math.max(8,40-6*S.pc),pcCost=()=>4000*S.pc*S.pc;
+const Q=[['Торг −10%','b10'],['Торг −20%','b20'],['Какие дефекты?','def'],['Не подделка?','fake'],['Последняя цена?','last']];
+const PCBUY=15000,BMN=['xX_Shadow','darkphone','NoName','Vasya_opt','user_4412','tech_ghost'];
+const scam=()=>Math.max(.1,.3-S.rep*.0005);
+const FEM=new Set(['Марина','Ольга','Света','Наталья','Елена','Ксения','Татьяна','Полина']);
+const hs=s=>[...String(s)].reduce((a,c)=>(a*31+c.charCodeAt(0))>>>0,7);
+function av(n,z){const h=hs(n),a=BMN.includes(n)?['🕶','🥷','👤','😎','🦹']:FEM.has(n)?['👩','👱‍♀️','👩‍🦰','👩‍🦱','👵']:['🧑','👨','🧔','👱','👨‍🦱','👴'],u=h%360;
+  return`<span style="flex:none;display:inline-flex;align-items:center;justify-content:center;width:${z}px;height:${z}px;border-radius:50%;background:linear-gradient(135deg,hsl(${u},65%,64%),hsl(${(u+40)%360},65%,48%));font-size:${Math.round(z*.55)}px;line-height:1">${a[h%a.length]}</span>`}
+function bub(x,w){const c=`max-width:78%;padding:8px 12px;border-radius:14px;background:${x.me?'var(--ac)':'var(--bg)'};color:${x.me?'#fff':'var(--tx)'}`;
+  return x.me?`<div style="justify-self:end;${c}">${esc(x.t)}</div>`:`<div style="display:flex;gap:6px;align-items:flex-end;justify-self:start;max-width:90%">${av(w,30)}<div style="${c}">${esc(x.t)}</div></div>`}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const DEFR=[['Перегрев',.1],['Артефакты / ошибки',.2],['Повреждён разъём',.12],['Нестабильная работа',.15]];
+const DEFT=[['Не включается',.25],['Нет сигнала HDMI',.12],['Глючит Wi‑Fi',.1],['Перегрев',.1],['Проблема с платой',.3],['Нет пульта',.04],['Царапины корпуса',.04]];
+const PHD=['Разбитый экран','Разбита задняя крышка','Разбито стекло камеры','Сломана камера'];
+const dpool=k=>I[k][2]==='r'?DEFR:I[k][2]==='t'?DEFT:kd(k)==='d'?DEFC:kd(k)==='p'?DEFP:DEF.filter(x=>!PHD.includes(x[0]));
+const DEF=[['Разбитый экран',.12],['Слабая батарея',.06],['Не включается',.25],['Проблема с платой',.3],['Царапины корпуса',.04],['Разбита задняя крышка',.07],['Залипает кнопка',.03],['Перегрев',.1]];
+const SELL=['Алексей','Марина','Дмитрий','Ольга','Игорь','Света','Павел'];
+const EVS=[{t:'📈 Ажиотаж на телефоны: цены +15%',c:'p',m:1.15},{t:'📉 Падение цен на комплектующие: −15%',c:'r',m:.85},{t:'💻 Сезон студентов: ноутбуки и ПК +12%',c:'c',m:1.12},{t:'📉 Спад спроса: телефоны −12%',c:'p',m:.88},{t:'🧾 Проверка налоговой: ноутбуки и ПК −10%',c:'c',m:.9},{t:'📺 Ажиотаж на смарт-приставки: цены +15%',c:'t',m:1.15},{t:'📉 Спад спроса: смарт-приставки −12%',c:'t',m:.88}];
+const TIERS=[['📦 Коробка с барахолки',2,3,.78],['🧳 Чемодан из ломбарда',3,4,.8],['🏚 Контейнер с аукциона',4,6,.82]];
+const MAIN_IDS=[7192529760];            // главные админы (Telegram ID)
+const ADMIN_IDS=[997042938,6926179852];          // обычные админы (Telegram ID)
+const API='https://delicate-moon-7638.artemaleksandrovsteam.workers.dev';
+const TR_MIN=100;                      // минимальный перевод, ₽
+let TGID=0,INIT='',TGN='',TOP=null,TOPME=null,trBusy=0;
+const isMain=()=>MAIN_IDS.includes(TGID);
+const isAdm=()=>isMain()||ADMIN_IDS.includes(TGID);
+const $=s=>document.querySelector(s);
+const f=n=>Math.round(n).toLocaleString('ru-RU')+' ₽';
+const R=(a,b)=>a+Math.random()*(b-a),RI=(a,b)=>Math.floor(R(a,b+1)),P=a=>a[RI(0,a.length-1)],r100=n=>Math.round(n/100)*100;
+const KEY='perekup_miniapp_v59';
+// ⚖️ НАСТРОЙКИ СЛОЖНОСТИ (меняйте цифры здесь)
+const BAL={fee:.04,refresh:3e5,sellLo:.97,sellHi:1.15,buyLo:.95,buyHi:1.12,ordLo:1.03,ordHi:1.15,fixMul:1.3,bonus:1000};
+let sheet=null,arm=false;
+function fresh(){const s={bal:30000,rep:100,exp:0,uid:0,inv:[],mk:[],lots:[],ord:[],ev:null,next:Date.now()+18e4,flt:'a',tab:'m',sold:0,earn:0,fixed:0,bonus:0,chat:{},pc:1,own:0,bm:[],sl:[],bd:{},cap:8,ach:{},dr:{},dd:{},cn:0,t0:Date.now(),skx:0,pv:0,tx:[],done:[],pend:[],ws:{}};return s}
+function load(){try{const j=localStorage.getItem(KEY);if(j)return JSON.parse(j)}catch(e){}return null}
+let cloudReady=false,cloudTimer=null,cloudBusy=false,cloudAgain=false;
+function cloudPost(action,state){
+  return fetch(API+'/state',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({initData:INIT,action,state})}).then(async r=>{
+      const j=await r.json().catch(()=>({}));
+      if(!r.ok)throw new Error(j.error||('HTTP '+r.status));
+      return j;
+    });
+}
+function scheduleCloudSave(){
+  if(!cloudReady||!API||!TGID)return;
+  clearTimeout(cloudTimer);
+  cloudTimer=setTimeout(async()=>{
+    if(cloudBusy){cloudAgain=true;return}
+    cloudBusy=true;
+    try{await cloudPost('save',S)}
+    catch(e){console.warn('Cloud save failed:',e)}
+    finally{cloudBusy=false;if(cloudAgain){cloudAgain=false;scheduleCloudSave()}}
+  },900);
+}
+async function cloudLoad(){
+  if(!API||!TGID||!INIT)return;
+  try{
+    const j=await cloudPost('load');
+    if(j.state && typeof j.state==='object'){
+      S=j.state;
+      S.chat=S.chat||{};S.pc=S.pc||1;S.own=S.own||0;S.bm=S.bm||[];S.sl=S.sl||[];
+      S.bd=S.bd||{};S.cap=S.cap||8;S.ach=S.ach||{};S.dr=S.dr||{};S.dd=S.dd||{};
+      S.cn=S.cn||0;S.t0=S.t0||Date.now();S.skx=S.skx||0;S.pv=S.pv||0;
+      S.tx=S.tx||[];S.done=S.done||[];S.pend=S.pend||[];
+      try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+    }else if(!S){
+      S=fresh();regen();
+      await cloudPost('save',S);
+    }else{
+      // Первый вход: переносим локальный прогресс в облако, только если в D1 ещё нет сохранения.
+      await cloudPost('save',S);
+    }
+    cloudReady=true;
+    render();
+  }catch(e){
+    console.warn('Cloud load failed:',e);
+    // Не блокируем игру при временной недоступности сервера.
+    cloudReady=false;
+    render();
+  }
+}
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+  scheduleCloudSave();
+}
+let S=load();if(S){try{const _ph=['Разбитый экран','Разбита задняя крышка','Разбито стекло камеры','Сломана камера'];[...(S.inv||[]),...(S.mk||[]).map(m=>m&&m.dev)].forEach(d=>{if(d&&d.key&&I[d.key]&&I[d.key][2]!=='p'&&d.defs)d.defs=d.defs.filter(x=>!_ph.includes(x.n))})}catch(e){}S.chat=S.chat||{};S.pc=S.pc||1;S.own=S.own||0;S.bm=S.bm||[];S.sl=S.sl||[];S.bd=S.bd||{};S.cap=S.cap||8;S.ach=S.ach||{};S.dr=S.dr||{};S.dd=S.dd||{};S.cn=S.cn||0;S.t0=S.t0||Date.now();S.skx=S.skx||0;S.pv=S.pv||0;S.tx=S.tx||[];S.done=S.done||[];S.pend=S.pend||[]}
+try{if(S&&!localStorage.getItem(KEY+'_bak'))localStorage.setItem(KEY+'_bak',JSON.stringify(S))}catch(e){} // страховочная копия сохранения перед обновлением
+const lvl=()=>Math.floor((1+Math.sqrt(1+S.exp/12.5+1e-9))/2); // ур.2=100, ур.3=300, ур.4=600, ур.5=1000, ур.6=1500, ур.8=2800 опыта
+const mult=k=>(S.ev&&S.ev.c===I[k][2]?S.ev.m:1)*(S.dr[k]||1);
+const base=d=>(d.bv||I[d.key][1])*mult(d.key);
+function mk(key){
+  const r=Math.random(),n=r<.25?0:r<.6?1:r<.85?2:3;
+  let defs=[];
+  if(Math.random()<.06)defs=[{n:'Подделка',c:0,fake:1,k:0,fx:0}];
+  else defs=dpool(key).slice().sort(()=>Math.random()-.5).slice(0,n).map(x=>({n:x[0],c:r100(I[key][1]*x[1]),k:0,fx:0}));
+  if(I[key][2]==='p'&&!defs.some(x=>x.fake))DEFP.forEach(x=>{const q={'Разбитый экран':.3,'Разбита задняя крышка':.25,'Сломана камера':.2}[x[0]];if(q&&Math.random()<q&&!defs.some(y=>y.n===x[0]))defs.push({n:x[0],c:r100(I[key][1]*x[1]),k:0,fx:0})});
+  return{id:++S.uid,key,defs,paid:0,broke:0,offer:0,lock:LK.has(key)?1:0,ul:0};
+}
+function val(d){
+  const b=base(d);
+  if(d.broke)return r100(b*.1);
+  if(d.defs.some(x=>x.fake))return r100(b*.15);
+  const s=d.defs.reduce((a,x)=>a+(x.fx?0:x.c),0);
+  return r100(Math.max(b-BAL.fixMul*s,b*.3)*(d.lock?.32:1)*(1+(d.pg||0)));
+}
+function bmMk(){
+  const d=mk(pk());
+  if(!d.defs.some(x=>x.fake)){
+    if(Math.random()<.15)d.defs=[{n:'Подделка',c:0,fake:1,k:0,fx:0}];
+    else if(d.defs.length<2){const x=P(dpool(d.key).filter(y=>!d.defs.some(z=>z.n===y[0])));d.defs.push({n:x[0],c:r100(I[d.key][1]*x[1]),k:0,fx:0})}
+  }
+  d.defs.forEach(x=>x.k=0);return d;
+}
+function elite(n){const el=AK().filter(k=>I[k][1]>=1e6&&I[k][2]!=='r');for(let i=0;i<n&&el.length;i++){const d=mk(P(el));S.mk.push({id:++S.uid,dev:d,price:r100(val(d)*R(BAL.sellLo,BAL.sellHi)),who:P(SELL)})}}
+function regen(){
+  S.chat={};S.mk=[];KEYS.forEach(k=>{const o=S.dr[k]||1,n=Math.min(1.25,Math.max(.75,o+(1-o)*.1+R(-.04,.04)));S.dr[k]=n;S.dd[k]=n/o-1});for(let i=0;i<8;i++){const d=mk(pk());S.mk.push({id:++S.uid,dev:d,price:r100(val(d)*R(BAL.sellLo,BAL.sellHi)),who:P(SELL)})}
+  elite(lvl()>=8?2:1);
+  S.lots=TIERS.map((t,i)=>{const it=[];for(let j=0,n=RI(t[1],t[2]);j<n;j++)it.push(mk(pk()));const sum=it.reduce((a,d)=>a+val(d),0);return{id:++S.uid,name:t[0],items:it,sum,price:r100(sum*R(t[3]+.08,t[3]+.28)),peek:0}});
+  S.ord=[];for(let i=0;i<3;i++){const k=pkO();S.ord.push({id:++S.uid,key:k,reward:r100(I[k][1]*R(BAL.ordLo,BAL.ordHi)),exp:Date.now()+RI(20,45)*6e4})}
+  S.ev=Math.random()<.6?P(EVS):null;
+  S.bm=[];for(let i=0;i<6;i++){const d=bmMk();S.bm.push({id:++S.uid,dev:d,price:r100(val(d)*R(.45,.7)),who:P(BMN)})}
+  S.next=Date.now()+BAL.refresh;
+}
+function gain(x){const a=lvl();S.exp+=x;const n=lvl();let m='+'+x+' опыта';
+  if(n>a){m+=' · 🆙 ур. '+n;const nk=KEYS.filter(k=>I[k][3]===n);
+    if(nk.length){m+=' · открыто: '+unT(n);for(let i=0;i<Math.min(3,nk.length);i++){const d=mk(P(nk));S.mk.push({id:++S.uid,dev:d,price:r100(val(d)*R(BAL.sellLo,BAL.sellHi)),who:P(SELL)})}}}
+  return m}
+function nxB(){const nx=KEYS.map(k=>I[k][3]).filter(l=>l>lvl()).sort((a,b)=>a-b)[0];return nx?`<div class="ev" style="background:rgba(47,123,255,.12);color:var(--ac)">🔓 Ур. ${nx}: откроются ${unT(nx)}</div>`:''}
+// --- сборка ПК ---
+const SLOTS=[['cpu','⚙️ Процессор'],['gpu','🎮 Видеокарта'],['mb','🧷 Материнская плата'],['ram','🧩 Память'],['ssd','💾 Накопитель'],['psu','🔌 Блок питания'],['case','🗄 Корпус']];
+const okD=d=>!d.broke&&!d.sale&&d.defs.every(x=>x.fx&&!x.fake);
+function bdInfo(){
+  const p={};SLOTS.forEach(s=>{const id=S.bd[s[0]];p[s[0]]=id?S.inv.find(d=>d.id===id&&I[d.key][4]===s[0]&&okD(d))||null:null});
+  const all=SLOTS.every(s=>p[s[0]]),o={p,all,lv:0,val:0,paid:0,err:''};
+  if(all){const t=SLOTS.map(s=>I[p[s[0]].key][5]);o.lv=Math.max(1,Math.min(6,Math.round(t.reduce((a,b)=>a+b,0)/t.length)));
+    o.val=r100(SLOTS.reduce((a,s)=>a+I[p[s[0]].key][1],0)*1.12);o.paid=SLOTS.reduce((a,s)=>a+p[s[0]].paid,0);
+    if(I[p.psu.key][5]<I[p.gpu.key][5]-1)o.err='Блоку питания не хватит мощности для этой видеокарты'}
+  return o}
+// --- продажа покупателям ---
+const BUYN=['Андрей','Кирилл','Наталья','Роман','Елена','Артём','Ксения','Максим','Иван','Татьяна','Денис','Полина'];
+const unread=()=>S.sl.reduce((a,l)=>a+l.bs.filter(b=>b.un).length,0);
+function navBadge(){const b=document.querySelector('nav button[data-i="s"]');if(!b)return;let e=b.querySelector('em');const n=unread();if(n){if(!e){e=document.createElement('em');b.appendChild(e)}e.textContent=n}else if(e)e.remove()}
+function addBuyer(l,d,v){
+  const mx=r100(v*R(BAL.buyLo,BAL.buyHi)*(v>=2e5?.96:1)),who=P(BUYN),b={id:++S.uid,who,mx,offer:0,msgs:[],st:'o',rd:0,un:1,cp:l.ask,sc:Math.random()<(rt(who)<4?.5:.04)?1:0};let t;
+  if(l.ask<=mx*.98){b.offer=l.ask;t=P(['Беру за '+f(l.ask)+'! Можно сегодня забрать?','Здравствуйте! Цена '+f(l.ask)+' устраивает, беру.'])}
+  else{const o=Math.min(r100(mx*R(.9,.97)),l.ask);b.offer=o;t=P(['Здравствуйте! Ещё продаёте? Отдадите за '+f(o)+'?','Добрый день. Возьму за '+f(o)+', по рукам?','Привет! Дороговато, дам '+f(o)+'.'])}
+  b.msgs.push({me:0,t:t+(b.sc?' '+P(['Оплачу курьером после получения.','Отправлю курьера, переведу позже.','Деньги переведу, когда заберу.']):'')});l.bs.push(b);
+  toast('💬 '+who+': '+t);
+  if(S.tab==='s'||(sheet&&sheet.t==='bc'))render(1);else navBadge();
+}
+function tickSales(){
+  const now=Date.now();S.sl=S.sl.filter(l=>S.inv.some(d=>d.id===l.did));
+  S.sl.forEach(l=>{
+    if(now<l.nb)return;
+    const d=S.inv.find(x=>x.id===l.did),v=val(d),ratio=l.ask/v;
+    l.nb=now+RI(10,22)*1000*(ratio>1.8?5:ratio>1.35?2.2:1)*(v>=1e6?2:1);
+    if(l.bs.filter(b=>b.st!=='g').length>=3||l.bs.length>=8)return;
+    if(ratio>2.2&&Math.random()<.7)return;
+    addBuyer(l,d,v);
+  });
+}
+function bTalk(l,b,txt,kind,num){
+  b.msgs.push({me:1,t:txt});if(num)b.cp=num;
+  setTimeout(()=>{
+    if(b.st==='g')return;let r;
+    if(kind==='pre'){if(b.sc){r='Предоплаты не будет, курьер заберёт и оплатит. Не хотите — не надо.';b.st='g'}else{r='Хорошо, переведу предоплату. Давайте встретимся.';b.safe=1}}
+    else if(kind==='no'){r=P(['Ладно, понял. Удачи с продажей!','Хорошо, тогда всего доброго.']);b.st='g'}
+    else if(!num)r='Не совсем понял. Назовите цену, пожалуйста.';
+    else{b.rd++;
+      if(b.offer&&num<=b.offer){b.offer=num;r='Отлично, беру за '+f(num)+'!'}
+      else if(num<=b.mx){b.offer=num;r='Хорошо, согласен на '+f(num)+'. Беру!'}
+      else if(b.rd>=5){b.st='g';r='Мне надоело торговаться, ухожу.'}
+      else if(num<=b.mx*1.12){b.offer=Math.min(r100(Math.max(b.offer,b.mx*R(.93,.99))),b.mx);r='Давайте так: '+f(b.offer)+'. Это максимум.'}
+      else if(Math.random()<.35){b.st='g';r='Это слишком дорого, поищу в другом месте.'}
+      else r=b.offer?'Слишком дорого. Могу '+f(b.offer)+'.':'Слишком дорого.'}
+    b.msgs.push({me:0,t:r});
+    if(sheet&&sheet.t==='bc'&&sheet.b===b.id)render(1);else{b.un=1;toast('💬 '+b.who+': '+r);if(S.tab==='s')render(1);else navBadge()}
+  },650);
+}
+function doSale(l,b){const d=S.inv.find(x=>x.id===l.did);if(!d)return;const p=b.offer,fee=Math.round(p*BAL.fee),net=p-fee;
+  if(b.sc&&!b.safe){S.inv=S.inv.filter(x=>x!==d);S.sl=S.sl.filter(x=>x!==l);S.rep=Math.max(0,S.rep-5);sheet=null;toast('🚨 '+b.who+' оказался мошенником: забрал '+nm(d)+' и не заплатил. Репутация −5');return}
+  S.bal+=net;S.earn+=net-d.paid;if(p>=1e6)S.big=(S.big||0)+1;S.sold++;S.inv=S.inv.filter(x=>x!==d);S.sl=S.sl.filter(x=>x!==l);sheet=null;
+  toast('✅ Продано '+b.who+' за '+f(p)+' · комиссия '+f(fee)+' · '+gain(RI(15,25)+Math.min(30,Math.floor(p/1e5))))}
+function toast(t){const e=document.createElement('div');e.className='toast';e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),2200)}
+function chips(d){return(d.pg?'<span class="ch ok">🤖 '+d.pgn+' · +'+Math.round(d.pg*100)+'%</span>':d.pu?'<span class="ch">⏳ Прошивка…</span>':'')+(d.lock?'<span class="ch bad">🔒 Заблокирован</span>':'')+chips0(d)}
+function chips0(d){
+  if(!d.defs.length)return'<span class="ch ok">Без дефектов</span>';
+  if(!d.defs[0].k)return'<span class="ch">❓ Дефекты неизвестны</span>';
+  return d.defs.map(x=>`<span class="ch ${x.fx?'ok':'bad'}">${x.fake?'Подделка':x.n+' · '+f(x.c)}</span>`).join('');
+}
+function hdr(){
+  const left=Math.max(0,Math.ceil((S.next-Date.now())/1000));
+  return`<div class="top"><button class="pb ${S.tab==='p'?'on':''}" data-a="tab" data-i="p" aria-label="Профиль">${IC('user')}</button><small>Баланс</small><div class="bal">${f(S.bal)}</div><div class="row" style="margin-top:8px"><div class="mut" style="color:#fff;opacity:.85">⏱ Обновление рынка: <span id="cd">${Math.floor(left/60)}:${String(left%60).padStart(2,'0')}</span></div><div><span class="pill">⭐ ${S.rep}</span><span class="pill">🛠 ур. ${lvl()}</span></div></div></div>`+(S.ev?`<div class="ev">${S.ev.t}</div>`:'');
+}
+// ===== 🔍 ВИЗУАЛЬНЫЙ ОСМОТР: телефоны и ноутбуки, две стороны =====
+const BK='Разбита задняя крышка';
+// где виден дефект: 0 = спереди (экран), 1 = сзади (крышка), нет значения = внутри, снаружи не видно
+const LOC={'Разбитый экран':0,[BK]:1,'Царапины корпуса':1,'Не включается':0,'Проблема с платой':0,'Залипает кнопка':0,'Подделка':1,'Разбито стекло корпуса':0,'Разбито стекло камеры':1,'Сломана камера':1,'Нет сигнала HDMI':1};
+const isLap=k=>!!I[k]&&I[k][2]==='c'&&I[k][0].startsWith('💻');
+function hasView(k){return !!I[k]&&'pct'.includes(I[k][2])}
+const defSide=x=>x.fake?1:LOC[x.n];
+const sideOf=a=>((Math.round((a||0)/180)%2)+2)%2;
+const rng=s=>()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+let SVU=0;
+const PAL=[['#3a3f4c','#171a21'],['#e6d6c2','#bfa98c'],['#44577f','#1f2a47'],['#cfd4de','#9ba3b3'],['#7f63b0','#4b3673'],['#2f6f5e','#153a31']],GOLD=['#f3d98a','#b88a2c'];
+const pcol=d=>/Gold|Vertu|Caviar|Platinum/.test(I[d.key][0])?GOLD:PAL[hs(d.key+d.id)%PAL.length];
+const n1=v=>v.toFixed(1);
+// какие дефекты видны снаружи (только после осмотра или если устройство сломано окончательно)
+function dfl(d,kn){
+  const F={};
+  if(d.broke){F.scr=F.bk=F.off=F.glass=F.cam=1;return F}
+  if(!kn)return F;
+  d.defs.forEach(x=>{if(x.fx)return;
+    if(x.fake)F.fake=1;else if(x.n==='Разбитый экран'||x.n==='Разбито стекло корпуса')F.scr=1;else if(x.n==='Нет сигнала HDMI')F.hdmi=1;else if(x.n==='Разбито стекло камеры')F.glass=1;else if(x.n==='Сломана камера')F.cam=1;else if(x.n===BK)F.bk=1;else if(x.n==='Царапины корпуса')F.sc=1;
+    else if(x.n==='Не включается')F.off=1;else if(x.n==='Проблема с платой')F.brd=1;else if(x.n==='Залипает кнопка')F.btn=1});
+  return F}
+// трещины: паутина от точки удара
+function crack(sd,cx,cy,R){
+  const r=rng(sd);let p='';const n=8+Math.floor(r()*4);
+  for(let i=0;i<n;i++){
+    let an=i/n*6.283+(r()-.5)*.5,x=cx,y=cy;const st=4+Math.floor(r()*3),L=R*(.55+r()*.6)/st;p+='M'+n1(cx)+' '+n1(cy);
+    for(let s=0;s<st;s++){
+      an+=(r()-.5)*.4;x+=Math.cos(an)*L;y+=Math.sin(an)*L;p+='L'+n1(x)+' '+n1(y);
+      if(r()<.4){const ba=an+(r()<.5?-1:1)*(.7+r()*.5),bl=L*(.7+r()*.9);p+='L'+n1(x+Math.cos(ba)*bl)+' '+n1(y+Math.sin(ba)*bl)+'M'+n1(x)+' '+n1(y)}
+    }}
+  for(let k=1;k<=3;k++){const rr=R*.13*k*(1+r()*.3);let up=1;
+    for(let s=0;s<=18;s++){const an=s/18*6.283,rv=rr*(.85+r()*.3);p+=(up?'M':'L')+n1(cx+Math.cos(an)*rv)+' '+n1(cy+Math.sin(an)*rv);up=r()<.22}}
+  let dots='';for(let i=0;i<14;i++){const an=r()*6.283,q=r()*R*.5;dots+=`<circle cx="${n1(cx+Math.cos(an)*q)}" cy="${n1(cy+Math.sin(an)*q)}" r="${n1(.7+r()*1.2)}" fill="#fff" fill-opacity=".7"/>`}
+  return`<g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="${p}" stroke="#000" stroke-opacity=".55" stroke-width="2.6"/><path d="${p}" stroke="#fff" stroke-opacity=".9" stroke-width="1.1"/></g><circle cx="${n1(cx)}" cy="${n1(cy)}" r="4" fill="#fff" fill-opacity=".85"/>${dots}`}
+function scrat(sd,x0,y0,w,h,n){
+  const r=rng(sd);let s='';
+  for(let i=0;i<n;i++){const x=x0+r()*w,y=y0+r()*h,an=r()*3.14,l=14+r()*42;s+='M'+n1(x)+' '+n1(y)+'l'+n1(Math.cos(an)*l)+' '+n1(Math.sin(an)*l)}
+  return`<path d="${s}" stroke="#fff" stroke-opacity=".8" stroke-width="1.1" stroke-linecap="round" fill="none"/><path d="${s}" transform="translate(.9 .9)" stroke="#000" stroke-opacity=".35" stroke-width=".8" stroke-linecap="round" fill="none"/>`}
+function glitch(sd,x,y,w,h){
+  const r=rng(sd),C=['#ff2bd6','#18e0ff','#7dff3a'];let s='';
+  for(let i=0;i<9;i++)s+=`<rect x="${x}" y="${n1(y+r()*(h-12))}" width="${w}" height="${n1(2+r()*9)}" fill="${C[i%3]}" fill-opacity=".6"/>`;
+  s+=`<rect x="${n1(x+r()*(w-8))}" y="${y}" width="6" height="${h}" fill="#fff" fill-opacity=".14"/>`;return s}
+const lens=(x,y,r)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#0a0b0f" stroke="#9aa1b2" stroke-width="2.4"/><circle cx="${x}" cy="${y}" r="${n1(r*.84)}" fill="none" stroke="#2a2d38" stroke-width="1.4"/><circle cx="${x}" cy="${y}" r="${n1(r*.66)}" fill="#101a33"/><circle cx="${x}" cy="${y}" r="${n1(r*.44)}" fill="#1c3a78"/><circle cx="${x}" cy="${y}" r="${n1(r*.22)}" fill="#0a1226"/><circle cx="${n1(x-r*.28)}" cy="${n1(y-r*.28)}" r="${n1(r*.16)}" fill="#fff" fill-opacity=".6"/><circle cx="${n1(x+r*.22)}" cy="${n1(y+r*.25)}" r="${n1(r*.08)}" fill="#7fb0ff" fill-opacity=".7"/>`;
+const ring=(x,y,r)=>`<circle class="pul" cx="${n1(x)}" cy="${n1(y)}" r="${r}" fill="none" stroke="#ff3b3b" stroke-width="3" stroke-dasharray="7 5"/>`;
+const apple=(x,y,sc,fk,ink)=>`<g transform="translate(${x} ${y}) ${fk?'rotate(-14) scale('+n1(sc*1.2)+' '+n1(sc*.85)+')':'scale('+sc+')'}" fill="rgba(${ink},.72)"><path d="M0 -6C-6 -14 -20 -10 -20 6C-20 18 -12 28 -6 28C-3 28 -2 26 0 26C2 26 3 28 6 28C12 28 20 18 20 6C20 -10 6 -14 0 -6Z"/><path d="M1 -8C0 -18 6 -24 14 -24C14 -16 8 -9 1 -8Z"/></g>`;
+// ---- телефон ----
+function phoneFace(d,side,F,hn){
+  const u='k'+(++SVU),nn=I[d.key][0],[c1,c2]=pcol(d),ip=/iPhone|Duo|Vertu|Caviar/.test(nn),pro=/Pro|Duo|Gold|Platinum|Caviar|Vertu/.test(nn),sg=/Samsung/.test(nn),px=/Pixel/.test(nn),
+    hue=hs(d.key)%360,sd=d.id*7919+13,lt=parseInt(c1.slice(1,3),16)>170,ink=lt?'0,0,0':'255,255,255';
+  let s=`<svg viewBox="0 0 200 410" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="${u}b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient><linearGradient id="${u}w" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl(${hue},75%,52%)"/><stop offset="1" stop-color="hsl(${(hue+70)%360},70%,24%)"/></linearGradient><linearGradient id="${u}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".26"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="${u}f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".35" stop-color="#fff" stop-opacity=".15"/><stop offset=".7" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity=".12"/></linearGradient><radialGradient id="${u}r" cx=".25" cy=".12" r=".9"><stop offset="0" stop-color="#fff" stop-opacity=".32"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><clipPath id="${u}c"><rect x="${side?10:18}" y="${side?8:16}" width="${side?180:164}" height="${side?394:378}" rx="${side?34:27}"/></clipPath></defs>`;
+  s+=`<rect x="5" y="96" width="6" height="30" rx="2" fill="#4a5266"/><rect x="5" y="136" width="6" height="46" rx="2" fill="#4a5266"/><rect x="189" y="128" width="6" height="64" rx="2" fill="${F.btn&&!side?'#e5484d':'#2c3140'}"/>`;
+  if(!side){
+    const rs=rng(sd+3),cx=40+rs()*120,cy=70+rs()*250;
+    s+=`<rect x="10" y="8" width="180" height="394" rx="34" fill="#0a0c10" stroke="url(#${u}f)" stroke-width="3.2"/><rect x="14" y="12" width="172" height="386" rx="30" fill="none" stroke="#000" stroke-width="3"/><g clip-path="url(#${u}c)">`;
+    if(F.off)s+=`<rect x="18" y="16" width="164" height="378" fill="#050608"/>`;
+    else if(d.lock)s+=`<rect x="18" y="16" width="164" height="378" fill="#0b1220"/><rect x="82" y="150" width="36" height="30" rx="6" fill="#e5484d"/><path d="M88 150v-10a12 12 0 0 1 24 0v10" fill="none" stroke="#e5484d" stroke-width="6"/><text x="100" y="212" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">Activation Lock</text><text x="100" y="230" text-anchor="middle" font-size="10" fill="#9aa4b8" font-family="system-ui,sans-serif">iPhone заблокирован</text>`;
+    else{
+      s+=`<rect x="18" y="16" width="164" height="378" fill="url(#${u}w)"/><text x="100" y="62" text-anchor="middle" font-size="12" fill="#fff" fill-opacity=".85" font-family="system-ui,sans-serif">вт, 3 нояб.</text><text x="100" y="104" text-anchor="middle" font-size="46" font-weight="700" fill="#fff" fill-opacity=".92" font-family="system-ui,sans-serif">9:41</text>`;
+      s+=`<circle cx="150" cy="290" r="90" fill="hsl(${(hue+50)%360},85%,65%)" fill-opacity=".28"/><circle cx="20" cy="190" r="60" fill="#fff" fill-opacity=".08"/><rect x="28" y="136" width="70" height="70" rx="18" fill="#fff" fill-opacity=".18"/><circle cx="52" cy="160" r="9" fill="#ffd54a"/><rect x="40" y="182" width="46" height="5" rx="2.5" fill="#fff" fill-opacity=".7"/><rect x="104" y="136" width="70" height="70" rx="18" fill="#fff" fill-opacity=".18"/><rect x="116" y="176" width="8" height="18" rx="2" fill="#fff" fill-opacity=".8"/><rect x="130" y="164" width="8" height="30" rx="2" fill="#fff" fill-opacity=".8"/><rect x="144" y="150" width="8" height="44" rx="2" fill="#fff" fill-opacity=".8"/><text x="34" y="36" font-size="10" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">9:41</text><rect x="148" y="28" width="20" height="9" rx="2.5" fill="none" stroke="#fff" stroke-opacity=".9"/><rect x="150" y="30" width="13" height="5" rx="1.2" fill="#fff"/><rect x="132" y="31" width="3" height="6" fill="#fff"/><rect x="137" y="29" width="3" height="8" fill="#fff"/><rect x="142" y="27" width="3" height="10" fill="#fff"/>`;
+      ['#ff5a5f','#34c759','#2f7bff','#ffb020'].forEach((c,i)=>s+=`<rect x="${30+i*38}" y="344" width="30" height="30" rx="9" fill="${c}"/><rect x="${33+i*38}" y="347" width="24" height="10" rx="5" fill="#fff" fill-opacity=".25"/>`);
+      s+=`<rect x="70" y="384" width="60" height="4" rx="2" fill="#fff" fill-opacity=".85"/>`;
+      if(F.brd)s+=glitch(sd+5,18,16,164,378)}
+    s+=`</g>`+(ip?`<rect x="72" y="24" width="56" height="16" rx="8" fill="#000"/><circle cx="116" cy="32" r="3.4" fill="#10183a" stroke="#27345f"/>`:`<circle cx="100" cy="31" r="5" fill="#000" stroke="#1a1d26" stroke-width="1.5"/>`)+`<rect x="18" y="16" width="164" height="378" rx="27" fill="url(#${u}g)"/>`;
+    if(F.scr)s+=`<g clip-path="url(#${u}c)">${crack(sd,cx,cy,175)}</g>`;
+    if(hn==='Разбитый экран')s+=ring(cx,cy,66);
+    if(hn==='Залипает кнопка')s+=ring(192,160,34);
+    if(hn==='Не включается'||hn==='Проблема с платой')s+=ring(100,200,80);
+  }else{
+    const rc=rng(sd+11),cx=40+rc()*120,cy=150+rc()*200,fk=!!F.fake,brand=ip?'iPhone':sg?(fk?'SAMSUMG':'SAMSUNG'):px?(fk?'Gooqle':'Google'):((b=>b?(fk?b[2]:b[1]):(fk?'Redrni':'Redmi'))(BRD.find(b=>b[0].test(nn))));
+    s+=`<rect x="10" y="8" width="180" height="394" rx="34" fill="url(#${u}b)" stroke="url(#${u}f)" stroke-width="3"/><g clip-path="url(#${u}c)"><path d="M10 8H190V140L10 260Z" fill="#fff" fill-opacity=".08"/><rect x="10" y="8" width="180" height="394" fill="url(#${u}r)"/>`;
+    if(ip){
+      s+=pro?`<rect x="22" y="20" width="88" height="90" rx="22" fill="rgba(255,255,255,.14)" stroke="rgba(0,0,0,.28)" stroke-width="1.5"/>${lens(48,46,14)}${lens(48,84,14)}${lens(86,65,14)}<circle cx="90" cy="34" r="4.5" fill="#f7f1c8"/><circle cx="90" cy="98" r="3.5" fill="#222"/>`
+         :`<rect x="22" y="20" width="76" height="76" rx="20" fill="rgba(255,255,255,.14)" stroke="rgba(0,0,0,.28)" stroke-width="1.5"/>${lens(44,42,14)}${lens(72,72,14)}<circle cx="76" cy="36" r="4" fill="#f7f1c8"/>`;
+      s+=apple(100,218,1.7,fk,ink)}
+    else if(sg)s+=lens(44,46,12)+lens(44,82,12)+lens(44,118,12)+`<circle cx="72" cy="46" r="4" fill="#f7f1c8"/>`;
+    else if(px)s+=`<rect x="0" y="62" width="200" height="50" fill="#0c0e13"/>${lens(78,87,15)}${lens(114,87,15)}<circle cx="146" cy="87" r="5" fill="#f7f1c8"/>`;
+    else s+=`<rect x="22" y="20" width="78" height="78" rx="18" fill="#0d0f14" stroke="rgba(255,255,255,.2)"/>${lens(46,44,11)}${lens(76,44,11)}${lens(60,76,11)}`;
+    s+=`<text x="100" y="354" text-anchor="middle" font-size="12" letter-spacing="2" font-weight="600" fill="rgba(${ink},.55)" font-family="system-ui,sans-serif">${brand}</text>`;
+    const cc=ip?(pro?[66,65]:[60,58]):sg?[44,82]:px?[100,87]:[61,59],cr=sg?44:px?70:ip&&pro?56:48;
+    if(F.cam)s+=`<circle cx="${cc[0]}" cy="${cc[1]}" r="${cr*.8}" fill="#000" fill-opacity=".55"/><path d="M${cc[0]-cr*.5} ${cc[1]-cr*.5}L${cc[0]+cr*.5} ${cc[1]+cr*.5}M${cc[0]+cr*.5} ${cc[1]-cr*.5}L${cc[0]-cr*.5} ${cc[1]+cr*.5}" stroke="#ff3b3b" stroke-width="4" stroke-linecap="round"/>`;
+    if(F.glass)s+=crack(sd+21,cc[0],cc[1],cr);
+    if(F.sc)s+=scrat(sd+1,26,130,148,250,9);
+    if(F.bk)s+=crack(sd+11,cx,cy,190);
+    s+=`</g>`;
+    if(F.fake){const fy=ip?218:352;s+=`<circle cx="100" cy="${fy}" r="${ip?44:50}" fill="none" stroke="#ff3b3b" stroke-width="2" stroke-dasharray="4 4"/><text x="100" y="${fy+(ip?62:-56)}" text-anchor="middle" font-size="11" font-weight="700" fill="#ff3b3b" font-family="system-ui,sans-serif">логотип не оригинальный</text>`}
+    if(hn===BK)s+=ring(cx,cy,66);
+    if(hn==='Разбито стекло камеры'||hn==='Сломана камера')s+=ring(cc[0],cc[1],cr+6);
+    if(hn==='Царапины корпуса')s+=ring(100,255,88);
+    if(hn==='fake')s+=ring(100,ip?218:352,58);
+  }
+  return s+'</svg>'}
+// ---- ноутбук: спереди открытый, сзади закрытая крышка ----
+function lapFace(d,side,F,hn){
+  const u='k'+(++SVU),nn=I[d.key][0],gm=/ROG|Razer|Alienware/.test(nn),mac=/MacBook/.test(nn),[c1,c2]=gm?PAL[0]:mac?(hs(d.key+d.id)%2?PAL[0]:PAL[3]):PAL[3],
+    hue=hs(d.key)%360,sd=d.id*7919+29,lt=parseInt(c1.slice(1,3),16)>170,ink=lt?'0,0,0':'255,255,255';
+  let s=`<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="${u}b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient><linearGradient id="${u}w" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl(${hue},75%,52%)"/><stop offset="1" stop-color="hsl(${(hue+70)%360},70%,24%)"/></linearGradient><linearGradient id="${u}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".24"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="${u}r" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ff2bd6"/><stop offset=".5" stop-color="#18e0ff"/><stop offset="1" stop-color="#7dff3a"/></linearGradient><clipPath id="${u}c"><rect x="46" y="18" width="228" height="148" rx="4"/></clipPath><clipPath id="${u}l"><rect x="14" y="24" width="292" height="190" rx="16"/></clipPath></defs>`;
+  if(!side){
+    const rs=rng(sd+3),cx=70+rs()*180,cy=40+rs()*110;
+    s+=`<path d="M22 176H298L312 230Q313 238 304 238H16Q7 238 8 230Z" fill="url(#${u}b)" stroke="rgba(0,0,0,.4)" stroke-width="1.5"/>`;
+    for(let r=0;r<4;r++)for(let c=0;c<12;c++){const stuck=F.btn&&r===1&&c===5;s+=`<rect x="${n1(30+c*21.8)}" y="${n1(184+r*9.5)}" width="19" height="7.5" rx="1.8" fill="${stuck?'#e5484d':'rgba(0,0,0,.55)'}"/>`}
+    s+=`<rect x="122" y="223" width="76" height="10" rx="3" fill="rgba(0,0,0,.12)" stroke="rgba(0,0,0,.28)"/>`
+      +`<rect x="38" y="10" width="244" height="166" rx="10" fill="#101216" stroke="#4a505e" stroke-width="2"/><g clip-path="url(#${u}c)">`;
+    if(F.off)s+=`<rect x="46" y="18" width="228" height="148" fill="#050608"/>`;
+    else{s+=`<rect x="46" y="18" width="228" height="148" fill="url(#${u}w)"/><rect x="72" y="42" width="112" height="72" rx="6" fill="#fff" fill-opacity=".88"/><circle cx="82" cy="52" r="3" fill="#ff5f57"/><circle cx="92" cy="52" r="3" fill="#febc2e"/><circle cx="102" cy="52" r="3" fill="#28c840"/><rect x="82" y="66" width="90" height="5" rx="2" fill="#000" fill-opacity=".15"/><rect x="82" y="78" width="70" height="5" rx="2" fill="#000" fill-opacity=".15"/><rect x="100" y="148" width="120" height="12" rx="6" fill="#fff" fill-opacity=".28"/>`;
+      if(F.brd)s+=glitch(sd+5,46,18,228,148)}
+    s+=`</g>`+(mac?`<rect x="140" y="18" width="40" height="8" rx="4" fill="#000"/>`:`<circle cx="160" cy="14" r="1.8" fill="#000"/>`)+`<rect x="46" y="18" width="228" height="148" rx="4" fill="url(#${u}g)"/><rect x="60" y="172" width="200" height="5" rx="2.5" fill="rgba(0,0,0,.4)"/>`;
+    if(F.scr)s+=`<g clip-path="url(#${u}c)">${crack(sd,cx,cy,150)}</g>`;
+    if(hn==='Разбитый экран')s+=ring(cx,cy,56);
+    if(hn==='Залипает кнопка')s+=ring(30+5*21.8+9,184+9.5+4,22);
+    if(hn==='Не включается'||hn==='Проблема с платой')s+=ring(160,92,84);
+  }else{
+    const rc=rng(sd+11),cx=60+rc()*200,cy=60+rc()*120,fk=!!F.fake,br=(nn.match(/ROG|Razer|Alienware|ASUS|Lenovo/)||['LAPTOP'])[0].toUpperCase();
+    s+=`<rect x="14" y="24" width="292" height="190" rx="16" fill="url(#${u}b)" stroke="rgba(0,0,0,.4)" stroke-width="2"/><g clip-path="url(#${u}l)"><path d="M14 24H306V100L14 160Z" fill="#fff" fill-opacity=".08"/>`;
+    s+=mac?apple(160,118,2.1,fk,ink):`<text x="160" y="128" text-anchor="middle" font-size="${br.length>6?24:34}" font-weight="800" letter-spacing="3" fill="rgba(${ink},.6)" font-family="system-ui,sans-serif" transform="${fk?'rotate(-8 160 118)':''}">${fk?br.slice(0,-1)+(br.slice(-1)==='S'?'5':'Q'):br}</text>`;
+    if(gm)s+=`<rect x="14" y="196" width="292" height="3" fill="url(#${u}r)"/>`;
+    if(F.sc)s+=scrat(sd+1,30,40,260,160,10);
+    if(F.bk)s+=crack(sd+11,cx,cy,170);
+    s+=`</g>`;
+    if(F.fake)s+=`<circle cx="160" cy="118" r="52" fill="none" stroke="#ff3b3b" stroke-width="2" stroke-dasharray="4 4"/><text x="160" y="196" text-anchor="middle" font-size="11" font-weight="700" fill="#ff3b3b" font-family="system-ui,sans-serif">логотип не оригинальный</text>`;
+    if(hn===BK)s+=ring(cx,cy,64);
+    if(hn==='Царапины корпуса')s+=ring(160,120,100);
+    if(hn==='fake')s+=ring(160,118,62);
+  }
+  return s+'</svg>'}
+const kd=k=>isLap(k)?'l':I[k][2]==='t'?'t':I[k][2]==='c'?'d':'p';
+const DEFP=DEF.concat([['Разбито стекло камеры',.05],['Сломана камера',.08]]);
+const DEFC=[['Разбито стекло корпуса',.1],['Не включается',.25],['Проблема с платой',.3],['Перегрев',.1],['Царапины корпуса',.04],['Залипает кнопка',.03]];
+const sdef=(u,c1,c2,hue)=>`<linearGradient id="${u}b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient><linearGradient id="${u}w" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl(${hue},75%,45%)"/><stop offset="1" stop-color="hsl(${(hue+70)%360},70%,18%)"/></linearGradient><linearGradient id="${u}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".24"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/></linearGradient>`;
+const hdm=(F,x,y)=>`<rect x="${x}" y="${y}" width="30" height="10" rx="2" fill="${F.hdmi?'#5a1010':'#05070b'}" stroke="#8a90a2"/>`+(F.hdmi?`<path d="M${x+6} ${y+2}l18 6M${x+24} ${y+2}l-18 6" stroke="#ff3b3b" stroke-width="2"/>`:'');
+const fkT=(y)=>`<text x="160" y="${y}" text-anchor="middle" font-size="11" font-weight="700" fill="#ff3b3b" font-family="system-ui,sans-serif">логотип не оригинальный</text>`;
+// ---- настольный ПК: спереди (стекло/корпус), сзади (порты) ----
+function pcFace(d,side,F,hn){
+  const u='k'+(++SVU),nn=nm(d),mac=/Mac/.test(nn),srv=/сервер/.test(nn),sl=mac||srv,[c1,c2]=mac?PAL[3]:PAL[0],hue=hs(d.key+d.id)%360,sd=d.id*7919+41,ink=mac?'0,0,0':'255,255,255',fk=!!F.fake,
+    bt=srv?(fk?'GPU SERVEQ':'GPU SERVER'):(fk?'GAMINQ':'GAMING'),[bx,by,bw,bh]=sl?[50,50,220,130]:[92,10,136,220],[gx,gy,gw,gh]=sl?[50,50,220,130]:[104,24,112,192],rx=sl?(mac?30:12):12,
+    rs=rng(sd+side*11),cx=gx+20+rs()*(gw-40),cy=gy+20+rs()*(gh-40),cm=sl?115:120,
+    logo=mac?apple(160,sl&&side?95:108,1.8,fk,ink):`<text x="160" y="${side?100:104}" text-anchor="middle" font-size="22" font-weight="800" letter-spacing="3" fill="rgba(${ink},.6)" font-family="system-ui,sans-serif">${bt}</text>`;
+  let s=`<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg"><defs>${sdef(u,c1,c2,hue)}<clipPath id="${u}c"><rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="${rx}"/></clipPath><clipPath id="${u}k"><rect x="${gx}" y="${gy}" width="${gw}" height="${gh}" rx="${sl?rx:4}"/></clipPath></defs>`;
+  if(!side){
+    if(sl)s+=`<rect x="50" y="50" width="220" height="130" rx="${rx}" fill="url(#${u}b)" stroke="rgba(0,0,0,.4)" stroke-width="2"/><g clip-path="url(#${u}k)"><path d="M50 50H270V110L50 150Z" fill="#fff" fill-opacity=".08"/>${logo}<rect x="130" y="150" width="60" height="4" rx="2" fill="${F.off?'#444':'#4ade80'}"/>${F.brd?glitch(sd+5,50,50,220,130):''}</g><circle cx="244" cy="164" r="7" fill="${F.btn?'#e5484d':'#222'}" stroke="rgba(${ink},.4)"/>`;
+    else{
+      s+=`<rect x="92" y="10" width="136" height="220" rx="12" fill="#14161b" stroke="#555d70" stroke-width="2"/><circle cx="210" cy="17" r="5" fill="${F.btn?'#e5484d':'#2c3140'}" stroke="#888"/><g clip-path="url(#${u}k)"><rect x="104" y="24" width="112" height="192" fill="${F.off?'#07080b':`url(#${u}w)`}"/>`;
+      if(!F.off){const h2=(hue+40)%360;s+=`<circle cx="160" cy="70" r="22" fill="#0b0c10" stroke="#6b7184" stroke-width="2"/><circle cx="160" cy="70" r="13" fill="none" stroke="hsl(${hue},90%,60%)" stroke-width="3"/><rect x="112" y="124" width="96" height="26" rx="4" fill="#0b0c10" stroke="#6b7184"/><circle cx="136" cy="137" r="10" fill="none" stroke="hsl(${h2},90%,60%)" stroke-width="3"/><circle cx="184" cy="137" r="10" fill="none" stroke="hsl(${h2},90%,60%)" stroke-width="3"/><rect x="108" y="196" width="104" height="4" rx="2" fill="hsl(${(hue+120)%360},90%,60%)"/>`+[0,1,2,3].map(i=>`<rect x="${192+i*6}" y="36" width="4" height="52" fill="hsl(${(hue+30)%360},80%,70%)"/>`).join('')+(F.brd?glitch(sd+5,104,24,112,192):'')}
+      s+=`</g>`}
+    s+=`<rect x="${gx}" y="${gy}" width="${gw}" height="${gh}" rx="${sl?rx:4}" fill="url(#${u}g)"/>`;
+    if(F.scr)s+=`<g clip-path="url(#${u}k)">${crack(sd,cx,cy,sl?170:150)}</g>`;
+    if(hn==='Разбито стекло корпуса'||hn==='Разбитый экран')s+=ring(cx,cy,60);
+    if(hn==='Залипает кнопка')s+=ring(sl?244:210,sl?164:17,16);
+    if(hn==='Не включается'||hn==='Проблема с платой')s+=ring(160,cm,sl?100:96);
+  }else{
+    s+=`<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="${rx}" fill="url(#${u}b)" stroke="rgba(0,0,0,.4)" stroke-width="2"/><g clip-path="url(#${u}c)"><path d="M${bx} ${by}H${bx+bw}V${by+bh*.5}L${bx} ${by+bh*.8}Z" fill="#fff" fill-opacity=".08"/>`;
+    if(sl)s+=logo+hdm(F,80,138)+`<rect x="120" y="139" width="20" height="9" rx="2" fill="#05070b" stroke="#8a90a2"/><rect x="150" y="139" width="20" height="9" rx="2" fill="#05070b" stroke="#8a90a2"/><rect x="180" y="139" width="26" height="9" rx="2" fill="#05070b" stroke="#8a90a2"/><circle cx="236" cy="143" r="6" fill="#05070b" stroke="#8a90a2"/>`;
+    else s+=logo.replace('y="100"','y="40"')+`<rect x="110" y="52" width="100" height="40" rx="3" fill="rgba(0,0,0,.35)"/>${hdm(F,118,70)}`+[0,1,2,3].map(i=>`<rect x="${156+i*14}" y="62" width="10" height="8" rx="1.5" fill="#05070b" stroke="#8a90a2"/>`).join('')+[0,1,2,3,4,5,6].map(i=>`<rect x="112" y="${102+i*11}" width="96" height="7" rx="2" fill="rgba(0,0,0,.4)"/>`).join('')+`<rect x="106" y="190" width="108" height="30" rx="4" fill="rgba(0,0,0,.4)"/><circle cx="160" cy="205" r="11" fill="#0b0c10" stroke="#6b7184"/>`;
+    if(F.sc)s+=scrat(sd+1,bx,by,bw,bh,9);
+    if(F.bk)s+=crack(sd+11,cx,cy,170);
+    s+=`</g>`;
+    if(F.fake)s+=`<circle cx="160" cy="${sl?100:38}" r="${sl?58:36}" fill="none" stroke="#ff3b3b" stroke-width="2" stroke-dasharray="4 4"/>`+fkT(sl?196:238);
+    if(hn==='Царапины корпуса')s+=ring(160,cm,sl?100:96);
+    if(hn==='fake')s+=ring(160,sl?100:38,sl?60:38);
+  }
+  return s+'</svg>'}
+// ---- смарт-приставка: спереди (светодиод), сзади (порты) ----
+function tvFace(d,side,F,hn){
+  const u='k'+(++SVU),nn=nm(d),gd=/Gold/.test(nn),lt=gd||/Sber/.test(nn),[c1,c2]=gd?GOLD:lt?PAL[3]:PAL[0],sd=d.id*7919+53,ink=lt?'0,0,0':'255,255,255',fk=!!F.fake,
+    b0=/Xiaomi/.test(nn)?'MI BOX':/Sber/.test(nn)?'SBER':/Яндекс/.test(nn)?'YANDEX':/Apple/.test(nn)?'TV':/NVIDIA/.test(nn)?'SHIELD':'SMART',bt=fk?b0.slice(0,-1)+'Q':b0,rs=rng(sd+side),cx=90+rs()*140,cy=90+rs()*60,
+    pt=(x,y,w)=>`<rect x="${x}" y="${y}" width="${w}" height="9" rx="2" fill="#05070b" stroke="#8a90a2"/>`;
+  let s=`<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg"><defs>${sdef(u,c1,c2,0)}<clipPath id="${u}c"><rect x="60" y="70" width="200" height="100" rx="20"/></clipPath></defs><ellipse cx="160" cy="184" rx="104" ry="9" fill="#000" fill-opacity=".18"/><rect x="60" y="70" width="200" height="100" rx="20" fill="url(#${u}b)" stroke="rgba(0,0,0,.4)" stroke-width="2"/><g clip-path="url(#${u}c)"><path d="M60 70H260V110L60 140Z" fill="#fff" fill-opacity=".08"/>`;
+  if(!side)s+=`<text x="160" y="124" text-anchor="middle" font-size="26" font-weight="800" letter-spacing="3" fill="rgba(${ink},.6)" font-family="system-ui,sans-serif">${b0}</text><rect x="130" y="146" width="60" height="5" rx="2.5" ${F.brd?'class="pul" fill="#ff3b3b"':`fill="${F.off?'#444':'#4ade80'}"`}/>`;
+  else s+=hdm(F,78,96)+pt(122,97,20)+pt(150,97,26)+`<circle cx="212" cy="102" r="6" fill="#05070b" stroke="#8a90a2"/><rect x="92" y="126" width="136" height="24" rx="4" fill="#fff" fill-opacity=".85"/><text x="160" y="143" text-anchor="middle" font-size="13" font-weight="700" fill="#222" font-family="system-ui,sans-serif">${bt}</text>`;
+  if(F.sc)s+=scrat(sd+1,60,70,200,100,8);
+  if(side?F.bk:F.scr)s+=crack(sd+side*11,cx,cy,150);
+  s+=`</g><rect x="60" y="70" width="200" height="100" rx="20" fill="url(#${u}g)"/>`;
+  if(!side){if(hn==='Не включается'||hn==='Проблема с платой')s+=ring(160,120,98)}
+  else{
+    if(F.fake)s+=`<circle cx="160" cy="138" r="62" fill="none" stroke="#ff3b3b" stroke-width="2" stroke-dasharray="4 4"/>`+fkT(206);
+    if(hn==='Нет сигнала HDMI')s+=ring(93,101,26);
+    if(hn==='Царапины корпуса')s+=ring(160,120,104);
+    if(hn==='fake')s+=ring(160,138,66)}
+  return s+'</svg>'}
+function face(d,side,kn,hl){
+  const F=dfl(d,kn),hd=kn&&hl!=null?d.defs[hl]:null,hn=hd&&!hd.fx?(hd.fake?'fake':hd.n):null;
+  const k=kd(d.key);return k==='l'?lapFace(d,side,F,hn):k==='t'?tvFace(d,side,F,hn):k==='d'?pcFace(d,side,F,hn):phoneFace(d,side,F,hn)}
+function walls(){
+  const L0=10.5,T0=9,W=129,H=289.5,R=22,N=8,out=[];
+  const P=(cx,cy,len,deg,ph)=>{
+    const t=Math.abs(Math.sin(ph*Math.PI/180)),m=(a,b)=>Math.round(a+(b-a)*t),
+    c=`rgb(${m(90,170)},${m(98,178)},${m(117,195)})`,l=`rgb(${m(120,205)},${m(128,212)},${m(147,225)})`,
+    w=len+.6;
+    out.push(`<div class="wl" style="width:${w.toFixed(2)}px;transform-origin:${(w/2).toFixed(2)}px 9px;transform:translate3d(${(cx-w/2).toFixed(2)}px,${(cy-9).toFixed(2)}px,0) rotateZ(${deg.toFixed(2)}deg) rotateX(90deg);background:linear-gradient(180deg,${c},${l} 50%,${c})"></div>`)};
+  P(L0+W/2,T0,W-2*R,0,270);P(L0+W/2,T0+H,W-2*R,0,90);
+  P(L0,T0+H/2,H-2*R,90,180);P(L0+W,T0+H/2,H-2*R,90,0);
+  const chord=2*R*Math.sin(Math.PI/4/N);
+  [[L0+R,T0+R,180],[L0+W-R,T0+R,270],[L0+W-R,T0+H-R,0],[L0+R,T0+H-R,90]].forEach(([cx,cy,a0])=>{
+    for(let k=0;k<N;k++){const ph=a0+(k+.5)*90/N,r=ph*Math.PI/180;
+      P(cx+R*Math.cos(r),cy+R*Math.sin(r),chord,ph+90,ph)}});
+  return out.join('')}
+/* ===== 3D-модели при осмотре: ноутбуки, ПК, приставки ===== */
+const TILT={l:-28,d:-14,t:-24};
+const t3=(d,sd,kn,ox,oy,sx,sy)=>`<div class="cw" style="transform:scale(${sx||1},${sy||1}) translate(${-ox}px,${-oy}px)">${face(d,sd,kn,sheet.hl)}</div>`;
+function box3(d,kn){const K=RDK(d),W=K.W,H=K.H,D=K.D,wc=K.wc,b=(st,c)=>`<div class="b3${c?' sd':''}" style="background-color:${wc};${st}">`;
+  return b(`left:0;top:0;width:${W}px;height:${H}px;border-radius:12px;transform:translateZ(${D/2}px)`)+t3(d,0,kn,K.ox,K.oy)+'</div>'
+   +b(`left:0;top:0;width:${W}px;height:${H}px;border-radius:12px;transform:rotateY(180deg) translateZ(${D/2}px)`)+t3(d,1,kn,K.ox,K.oy)+'</div>'
+   +b(`left:${(W-D)/2}px;top:0;width:${D}px;height:${H}px;transform:rotateY(-90deg) translateZ(${W/2}px)`,1)+'</div>'
+   +b(`left:${(W-D)/2}px;top:0;width:${D}px;height:${H}px;transform:rotateY(90deg) translateZ(${W/2}px)`,1)+'</div>'
+   +b(`left:0;top:${(H-D)/2}px;width:${W}px;height:${D}px;transform:rotateX(90deg) translateZ(${H/2}px)`,1)+'</div>'
+   +b(`left:0;top:${(H-D)/2}px;width:${W}px;height:${D}px;transform:rotateX(-90deg) translateZ(${H/2}px)`,1)+'</div>'}
+function lap3(d,kn){const nn=I[d.key][0],bc=/ROG|Razer|Alienware/.test(nn)?'#3a3f4c':'#cfd4de',e=(st,c)=>`<div class="b3${c?' sd':''}" style="background-color:${bc};${st}">`;
+  return e('left:0;top:90px;width:292px;height:150px;transform:rotateX(90deg);backface-visibility:visible')+t3(d,0,kn,8,176,.961,2.42)+'</div>'
+   +e('left:0;top:90px;width:292px;height:150px;transform:translateY(12px) rotateX(-90deg)',1)+'</div>'
+   +e('left:0;top:165px;width:292px;height:12px;transform:translateZ(75px)',1)+'</div>'
+   +e('left:0;top:165px;width:292px;height:12px;transform:rotateY(180deg) translateZ(75px)',1)+'</div>'
+   +e('left:71px;top:165px;width:150px;height:12px;transform:rotateY(-90deg) translateZ(146px)',1)+'</div>'
+   +e('left:71px;top:165px;width:150px;height:12px;transform:rotateY(90deg) translateZ(146px)',1)+'</div>'
+   +`<div style="position:absolute;left:0;top:-25px;width:292px;height:190px;transform-style:preserve-3d;transform-origin:50% 100%;transform:translateZ(-75px) rotateX(12deg)">`
+   +`<div class="b3" style="left:0;top:0;width:292px;height:190px;border-radius:14px;background:#101216">`+t3(d,0,kn,38,10,1.197,1.145)+'</div>'
+   +`<div class="b3" style="left:0;top:0;width:292px;height:190px;border-radius:14px;background-color:${bc};transform:rotateY(180deg)">`+t3(d,1,kn,14,24)+'</div></div>'}
+const m3=(d,kn)=>kd(d.key)==='l'?lap3(d,kn):box3(d,kn);
+function vwBlock(d,kn){
+  if(!hasView(d.key)||!sheet)return'';
+  const a=sheet.from!=null?sheet.from:(sheet.ang||0),cur=sideOf(sheet.ang),LB={l:['💻 Экран','🔙 Крышка'],p:['📱 Экран','🔙 Крышка'],d:['🖥 Спереди','🔙 Сзади'],t:['📺 Спереди','🔙 Сзади']}[kd(d.key)];
+  const P3=kd(d.key)==='p',P4=!P3,tx=P4?TILT[kd(d.key)]:0;if(sheet.kdv!==d.key){sheet.kdv=d.key;sheet.tx=tx;sheet.rx=tx}const rx=sheet.from!=null?(sheet.frx||0):(sheet.rx||0),vs=P4?(kd(d.key)==='l'?'width:292px;height:190px;':`width:${RDK(d).W}px;height:${RDK(d).H}px;`):'',sl=P3?walls():'';
+  return`<div class="vw${P3?' p3':' p4'}"><div class="vi" style="${vs}transform:rotateX(${rx}deg) rotateY(${a}deg)">${P4?m3(d,kn):`<div class="vf">${face(d,0,kn,sheet.hl)}</div>${sl}<div class="vf vb">${face(d,1,kn,sheet.hl)}</div>`}</div></div><div class="flt" style="padding:0 0 6px;justify-content:center;flex-wrap:wrap"><span class="ch ${cur?'':'on'}" data-a="vside" data-k="0">${LB[0]}</span><span class="ch ${cur?'on':''}" data-a="vside" data-k="1">${LB[1]}</span><span class="ch" data-a="vflip">🔄 Повернуть</span>${P3?'<span class="ch" data-a="vedge">↔ Ребро</span>':''}</div><div class="mut" style="text-align:center;font-size:12px;margin-bottom:6px">${kn?(P3?'3D-осмотр: крутите телефон пальцем в любую сторону, смотрите рамку, углы и заднюю крышку. Нажмите на дефект, чтобы показать его':'3D-осмотр: крутите устройство пальцем в любую сторону, смотрите со всех сторон. Нажмите на дефект, чтобы показать его'):'📷 Фото продавца: реальное состояние не видно, нужна диагностика'}</div>`}
+const vdAttr=(d,x,i)=>{const s=defSide(x);return hasView(d.key)&&s!=null?`data-a="vdef" data-i="${i}" data-k="${s}" style="cursor:pointer"`:''};
+function afterRender(){if(sheet&&sheet.from!=null){const i=$('.vi');if(i){void i.offsetWidth;i.style.transform='rotateX('+(sheet.rx||0)+'deg) rotateY('+(sheet.ang||0)+'deg)'}sheet.from=null}}
+function vgo(s,w){const a=s.ang||0;s.from=a;s.frx=s.rx||0;s.ang=Math.round((a-w*180)/360)*360+w*180;s.rx=s.tx||0}
+function vInsp(){
+  const l=S.mk.find(x=>x.id===sheet.id);if(!l)return'';
+  const d=l.dev,kn=d.defs.length===0||d.defs[0].k,cost=Math.max(500,r100(l.price*.002));
+  const lst=kn?(d.defs.length?d.defs.map((x,i)=>{const s=defSide(x),tag=s===0?'👁 спереди':s===1?'🔙 сзади':'⚙️ внутри, снаружи не видно';
+    return`<div class="df" ${vdAttr(d,x,i)}><span>${x.fake?'🚫 Подделка':x.n}<br><span class="mut">${tag}${s!=null?' · показать':''}</span></span><span class="ch bad">${x.fake?'копия':f(x.c)}</span></div>`}).join(''):'<div class="chips"><span class="ch ok">Без дефектов</span></div>'):'';
+  return`<div class="ov" data-a="close"><div class="sh" data-a="stay"><div class="row"><h3>${nm(d)}</h3><span class="price">${f(l.price)}</span></div><div class="mut">${esc(l.who)} · ${kn?'диагностика проведена · стоит ~'+f(val(d)):'дефекты неизвестны'}</div>${vwBlock(d,kn)}${lst}${kn?'':`<button class="b" data-a="insp" data-i="${l.id}" style="width:100%;margin-top:8px">🔍 Провести диагностику ${f(cost)}</button>`}<div class="acts"><button class="b ok" data-a="buy" data-i="${l.id}">Купить за ${f(l.price)}</button><button class="b g" data-a="close">Закрыть</button></div></div></div>`}
+function vMarket(){
+  const fl=[['a','🌐 Всё'],['p','📱 Телефоны'],['c','💻 Ноутбуки и ПК'],['r','🧩 Детали'],['t','📺 Приставки']];
+  const L=S.mk.filter(l=>S.flt==='a'||I[l.dev.key][2]===S.flt);
+  return nxB()+`<div class="flt">${fl.map(x=>`<span class="ch ${S.flt===x[0]?'on':''}" data-a="flt" data-i="${x[0]}">${x[1]}</span>`).join('')}</div>`+
+  (L.length?L.map(l=>{const d=l.dev,kn=d.defs.length===0||d.defs[0].k,hv=hasView(d.key),cost=Math.max(500,r100(l.price*.002)),below=kn&&l.price<val(d)*.95;
+    const head=`<div class="row"><h3>${nm(d)}</h3><span class="price">${f(l.price)}</span></div><div class="mut" style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">${av(l.who,26)}<span>${l.who} · ур. ${I[d.key][3]}${kn?' · стоит ~'+f(val(d)):''}</span>${rb(l.who)}${tr(d.key)}</div><div class="chips">${chips(d)}${below?'<span class="ch ok">📉 Ниже рынка</span>':''}</div>`;
+    return`<div class="c">${hv?`<div style="display:flex;gap:12px"><div class="th" data-a="look" data-i="${l.id}">${face(d,0,kn,null)}<span>👁</span></div><div style="flex:1;min-width:0">${head}</div></div>`:head}<div class="acts">${kn?(hv?`<button class="b g" data-a="look" data-i="${l.id}">👁 Осмотр</button>`:''):`<button class="b g" data-a="insp" data-i="${l.id}">🔍 Диагностика ${f(cost)}</button>`}<button class="b g" data-a="chat" data-i="${l.id}">💬${(S.chat[l.id]||[]).length?' '+S.chat[l.id].length:''}</button><button class="b" data-a="buy" data-i="${l.id}">Купить</button></div></div>`}).join(''):'<div class="empty">Тут пока пусто. Дождись обновления рынка.</div>');
+}
+function vInv(){
+  return`<div class="c"><div class="row"><div><b>📦 Склад ${S.inv.length}/${S.cap}</b><div class="mut">Аренда ${f(rent())} за цикл рынка</div></div><button class="b" data-a="capup" ${S.cap>=30?'disabled':''}>${S.cap>=30?'Максимум':'+2 места · '+f(capCost())}</button></div></div>`+vWS()+(S.inv.length?S.inv.map(d=>`<div class="c" data-a="dev" data-i="${d.id}"><div class="row"><h3>${nm(d)}</h3><span class="price">${f(val(d))}</span></div><div class="mut">Куплено за ${f(d.paid)}${d.sale?' · 💬 на продаже':''}</div><div class="chips">${d.broke?'<span class="ch bad">💥 Сломано окончательно</span>':chips(d)}</div></div>`).join(''):'<div class="empty">Склад пуст. Купи что-нибудь на рынке или в лотах.</div>');
+}
+function vLots(){
+  return S.lots.length?S.lots.map(l=>`<div class="c"><div class="row"><h3>${l.name}</h3><span class="price">${f(l.price)}</span></div><div class="mut">Предметов внутри: ${l.items.length}</div><div class="chips"><span class="ch ${l.peek?'ok':''}">${l.peek?'💡 Оценка: '+f(l.sum*.85)+' – '+f(l.sum*1.15):'🤫 Содержимое неизвестно'}</span></div><div class="acts">${l.peek?'':`<button class="b g" data-a="peek" data-i="${l.id}">👀 Заглянуть 400 ₽</button>`}<button class="b" data-a="lot" data-i="${l.id}">Купить</button></div></div>`).join(''):'<div class="empty">Лотов больше нет.</div>';
+}
+function vOrd(){
+  const O=S.ord.filter(o=>o.exp>Date.now());
+  return O.length?O.map(o=>{const m=Math.max(0,Math.ceil((o.exp-Date.now())/6e4));return`<div class="c"><div class="row"><h3>${I[o.key][0]}</h3><span class="price" style="color:var(--ok)">${f(o.reward)}</span></div><div class="mut">Нужно полностью исправное устройство · осталось ${m} мин</div><div class="acts"><button class="b ok" data-a="ordp" data-i="${o.id}">Сдать заказ</button></div></div>`}).join(''):'<div class="empty">Заказов пока нет.</div>';
+}
+function vProf(){
+  const L0=lvl(),lo=50*L0*(L0-1),hi=50*(L0+1)*L0,to=hi-S.exp,can=Date.now()-S.bonus>864e5;
+  return`<div class="c"><h3>🛠 Мастер, уровень ${lvl()}</h3><div class="mut">До следующего уровня: ${to} опыта. За каждую продажу 15–25 опыта, каждый следующий уровень дольше. Выше уровень, меньше шанс неудачного ремонта.</div><div class="bar"><i style="width:${Math.round((S.exp-lo)/(hi-lo)*100)}%"></i></div></div><div class="c"><div class="st"><div>Продано<b>${S.sold}</b></div><div>Прибыль<b>${f(S.earn)}</b></div><div>Починено<b>${S.fixed}</b></div><div>Репутация<b>${S.rep}</b></div><div>Капитал<b>${f(worth())}</b></div><div>Расходы/цикл<b>~${f(rent()+taxOf())}</b></div></div></div><div class="c"><div class="acts"><button class="b ok" data-a="bonus" ${can?'':'disabled'}>🎁 Бонус 1 000 ₽</button></div><div class="acts"><button class="b g" data-a="theme">🌓 Тема</button><button class="b bad" data-a="reset">${arm?'Точно сбросить?':'Сбросить игру'}</button></div></div><div class="mut" style="text-align:center;margin:12px">Ваш Telegram ID: ${TGID||'виден при запуске из Telegram'}</div>`+vTop()+vAch();
+}
+function pcBuild(){
+  const o=bdInfo(),sty='padding:8px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit;max-width:58%';
+  const rows=SLOTS.map(s=>{const opts=S.inv.filter(d=>I[d.key][4]===s[0]&&okD(d)),cur=o.p[s[0]];
+    return`<div class="df"><span>${s[1]}<br><span class="mut">${cur?I[cur.key][5]+'★ · '+f(I[cur.key][1]):'не выбрано'}</span></span><select data-b="${s[0]}" style="${sty}"><option value="0">— ${opts.length?'выбрать':'нет на складе'} —</option>${opts.map(d=>`<option value="${d.id}" ${cur&&cur.id===d.id?'selected':''}>${esc(I[d.key][0])}</option>`).join('')}</select></div>`}).join('');
+  const can=o.all&&!o.err,self=can&&(!S.own||o.lv>S.pc);
+  const build=`<div class="c"><h3>🔧 Сборка ПК</h3><div class="mut">Купите комплектующие (рынок, лоты, чёрный рынок; в продаже с ур. 8), почините их и соберите ПК. Нужны все 7 деталей, а блок питания должен тянуть видеокарту.</div>${rows}<div class="mut" style="margin:10px 0">${o.all?`Уровень сборки: <b>${o.lv}</b> · стоимость при продаже ≈ <b>${f(o.val)}</b>`+(o.err?`<br><span style="color:var(--bad)">⚠️ ${o.err}</span>`:''):'Выберите все детали со склада.'}${S.own&&o.all&&o.lv<=S.pc&&!o.err?'<br>Как свой ПК такая сборка не лучше текущего.':''}</div><div class="acts"><button class="b" data-a="bself" ${self?'':'disabled'}>${S.own?'Заменить свой ПК':'Поставить как свой'}</button><button class="b ok" data-a="bsale" ${can?'':'disabled'}>Собрать на продажу</button></div></div>`;
+  return build}
+function pcBm(){
+  const L=S.bm||[];
+  return`<div class="mut" style="margin-bottom:6px">🕶 Анонимные продавцы. Цены на 30–55% ниже рынка, но дефекты неизвестны. Риск, что вас кинут: <b style="color:#ff6b6b">~${Math.round(scam()*100)}%</b> (падает с ростом репутации). Список обновляется вместе с рынком.</div>`+
+  (L.map(l=>`<div class="bmc"><div class="row"><span style="display:flex;gap:8px;align-items:center">${av(l.who,34)}<span><b>${esc(l.who)}</b><br><span class="mut">${nm(l.dev)}</span></span></span><span class="price">${f(l.price)}</span></div><div class="chips">${chips(l.dev)}<span class="ch bad">⚠️ Без гарантий</span></div><div class="acts"><button class="b bad" data-a="bmb" data-i="${l.id}">Купить рискованно</button></div></div>`).join('')||'<div class="empty">Предложений нет. Дождитесь обновления рынка.</div>')}
+const ULS=['> Подключение к устройству…','> Обход блокировки активации…','> Подбор ключа…','> Патч загрузчика…','> Проверка результата…'];
+function pcUl(){
+  const L=S.inv.filter(d=>d.lock),run=S.inv.find(x=>x.ul),w=run?Math.max(0,Math.min(100,100-(run.ul-Date.now())/(pcT()*10))):0;
+  const log=run?ULS.slice(0,Math.min(5,Math.floor(w/20)+1)).join('\n')+'\n█':(S.ulr||'> Ожидание устройства…');
+  return`<div class="mut">Шанс успеха <b>${Math.round(pcP()*100)}%</b> · ${pcT()} сек · софт 300 ₽ за запуск. Одновременно работает одно устройство. Прокачайте ПК в «Апгрейд».</div><div class="term">${esc(log)}</div>`+
+  (L.length?L.map(d=>{const after=val({...d,lock:0});return`<div class="df"><span>${nm(d)}<br><span class="mut">сейчас ${f(val(d))} → после ~${f(after)}</span></span>${d.ul?`<div class="bar" style="width:90px"><i id="ulb" style="width:${w}%"></i></div>`:`<button class="b" data-a="unl" data-i="${d.id}" ${busy()?'disabled':''}>▶ Перепрошить</button>`}</div>`}).join(''):'<div class="empty" style="padding:18px">Нет заблокированных устройств на складе.<br>Купите iPhone с блокировкой на рынке или в «Чёрном рынке».</div>')}
+function pcUp(){
+  const mx=S.pc>=6,nx=Math.min(.95,.5+.09*(S.pc+1));
+  return`<div class="st"><div>Уровень ПК<b>${S.pc} / 6</b></div><div>Шанс<b>${Math.round(pcP()*100)}%</b></div><div>Время<b>${pcT()} сек</b></div><div>Апгрейд<b>${mx?'—':f(pcCost())}</b></div></div>`+
+  (mx?'<div class="mut" style="margin:10px 0">Максимальный уровень.</div>':`<div class="mut" style="margin:10px 0">После апгрейда: шанс ${Math.round(nx*100)}%, время ${Math.max(8,40-6*(S.pc+1))} сек.</div>`)+`<div class="acts"><button class="b" data-a="pcup" ${mx?'disabled':''}>${mx?'Максимум':'⚙️ Улучшить ПК'}</button></div>`}
+// --- прошивка смарт-приставок под Алису ---
+// [значок, название, +% к цене, стоимость, множитель времени, нужен навык, базовый шанс, опыт навыка, шанс «кирпича» при сбое, описание]
+const PGV=[
+ ['🟢','Алиса Лайт',.10,500,.5,1,.95,1,0,'Базовая прошивка: голосовой помощник и пульт. Почти без риска.'],
+ ['🟡','Алиса Про',.25,2500,1,2,.74,3,.12,'Умный дом, навыки и музыка. Сбой случается чаще.'],
+ ['🔴','Алиса Макс',.45,8000,1.6,4,.52,6,.3,'Кастомное ядро и максимальная цена перепродажи. Сбой может убить приставку.']];
+const SKT=[0,5,14,30,60],PGL=['> Подключение приставки по USB…','> Бэкап оригинальной прошивки…','> Установка модуля Алисы…','> Настройка голосовых навыков…','> Проверка работы…'];
+const skLv=()=>{const x=S.skx||0;let l=1;SKT.forEach((t,i)=>{if(x>=t)l=i+1});return l};
+const pgP=v=>Math.max(.15,Math.min(.97,v[6]+(skLv()-v[5])*.06+(S.pc-1)*.02)),pgT=v=>Math.max(6,Math.round(pcT()*v[4]));
+const raFl=v=>(1-pgP(v))*.5; // риск сбоя записи при ручной прошивке
+const busy=()=>S.inv.some(x=>x.ul||x.pu);
+const okP=d=>I[d.key][2]==='t'&&!d.pg&&!d.pu&&!d.broke&&!d.sale&&d.defs.every(x=>x.fx&&!x.fake);
+const pgN=()=>S.inv.filter(okP).length;
+function pgDone(d){const v=PGV[d.pv||0],lv0=skLv();d.pu=0;d.offer=0;
+  if(Math.random()<pgP(v)){d.pg=v[2];d.pgn=v[1];S.skx=(S.skx||0)+v[7];S.pgr='✅ '+nm(d)+': '+v[1]+' установлена, цена +'+Math.round(v[2]*100)+'%';toast('🤖 '+v[1]+' на '+nm(d)+': цена +'+Math.round(v[2]*100)+'% · '+gain(RI(8,14)+v[7]))}
+  else{S.skx=(S.skx||0)+1;if(Math.random()<v[8]){d.broke=1;S.pgr='💥 '+nm(d)+': приставка превратилась в кирпич';toast('💥 Сбой прошивки: '+nm(d)+' превратилась в кирпич')}else{S.pgr='❌ '+nm(d)+': сбой, приставка цела, деньги потрачены';toast('❌ Сбой прошивки, приставка цела')}}
+  if(skLv()>lv0)toast('🧠 Навык программирования: ур. '+skLv())}
+function pgBlock(d){
+  if(I[d.key][2]!=='t')return'';
+  if(d.pg)return`<div class="c" style="margin:10px 0"><b>🤖 ${d.pgn}</b><div class="mut">Приставка прошита, цена +${Math.round(d.pg*100)}%.</div></div>`;
+  if(!S.own)return`<div class="c" style="margin:10px 0"><b>🤖 Прошивка под Алису</b><div class="mut">Нужен свой ПК (${f(PCBUY)}). Прошитая приставка продаётся на 10–45% дороже.</div><button class="b" data-a="tab" data-i="c" style="width:100%;margin-top:8px">К покупке ПК</button></div>`;
+  return`<div class="c" style="margin:10px 0"><b>🤖 Прошивка под Алису</b><div class="mut">${okP(d)?'Прошитая приставка продаётся на 10–45% дороже.':d.pu?'Идёт прошивка…':d.defs.every(x=>x.fx&&!x.fake)?'Сейчас прошить нельзя.':'Сначала почините все дефекты.'}</div><button class="b" data-a="pcapp" data-i="pg" style="width:100%;margin-top:8px">🖥 Открыть программу на ПК</button></div>`}
+function pcPg(){
+  const sk=skLv(),x=S.skx||0,nx=SKT[sk],run=S.inv.find(d=>d.pu),sel=S.pv||0,v=PGV[sel];
+  const w=run?Math.max(0,Math.min(100,100-(run.pu-Date.now())/(run.pt*10))):0;
+  const log=run?PGL.slice(0,Math.min(5,Math.floor(w/20)+1)).join('\n')+'\n█':(S.pgr||'> Ожидание приставки…');
+  const T=S.inv.filter(d=>I[d.key][2]==='t'&&!d.pg&&!d.broke&&!d.sale),ok=T.filter(d=>d.pu||okP(d)),bad=T.length-ok.length;
+  const need=sk<v[5];
+  return`<div class="mut">🧠 Навык программирования: <b>ур. ${sk} / 5</b> (${x}${nx!=null?' / '+nx:''} оп.). Растёт с каждой прошивкой: выше навык — меньше риск сбоя и шире окно переподключения кабеля. Прошивка ручная: загрузчик, образ, запись, привязка.</div>
+<div class="flt" style="padding:8px 0">${PGV.map((p,i)=>`<span class="ch ${sel===i?'on':''}" data-a="pgv" data-i="${i}">${p[0]} ${p[1]}</span>`).join('')}</div>
+<div class="mut"><b>${v[1]}</b>: ${v[9]}<br>Цена приставки <b>+${Math.round(v[2]*100)}%</b> · софт ${f(v[3])} · запись ~${pgT(v)} сек · риск сбоя записи ~<b>${Math.round(raFl(v)*100)}%</b>${v[8]?' · при сбое ~'+Math.round(v[8]*100)+'% «кирпич»':''}${need?'<br><b style="color:#ff6b6b">🔒 Нужен навык: ур. '+v[5]+'</b>':''}</div>
+<div class="term">${esc(log)}</div>`+
+  (ok.length?ok.map(d=>`<div class="df"><span>${nm(d)}<br><span class="mut">сейчас ${f(val(d))} → после ~${f(val({...d,pg:v[2]}))}</span></span>${d.pu?`<div class="bar" style="width:90px"><i id="pgb" style="width:${w}%"></i></div>`:`<button class="b" data-a="pgrun" data-i="${d.id}" ${busy()||need?'disabled':''}>🔧 Root Алисы</button>`}</div>`).join(''):'<div class="empty" style="padding:18px">Нет готовых приставок.<br>Купите смарт-приставку на рынке (🏷 фильтр «Приставки») и почините все дефекты.</div>')+
+  (bad>0?`<div class="mut" style="margin-top:8px">🔧 Ещё ${bad} шт. на складе требуют ремонта дефектов перед прошивкой.</div>`:'')}
+function vPc(){
+  if(!S.own)return`<div class="c"><h3>🖥 Свой ПК</h3><div class="mut">Нужен для разблокировки заблокированных iPhone и открывает чёрный рынок. Можно купить готовый или собрать из комплектующих ниже.</div><div class="price" style="margin:8px 0">${f(PCBUY)}</div><div class="acts"><button class="b" data-a="pcbuy">Купить ПК</button></div></div>`+pcBuild();
+  const A=[['bm','🕶','Чёрный рынок'],['ul','🔓','Разблокировка'],['up','⚙️','Апгрейд'],['bd','🔧','Сборка ПК'],['pg','🤖','Алиса']],run=S.inv.find(x=>x.ul||x.pu),lk=S.inv.filter(d=>d.lock).length,cur=A.find(x=>x[0]===S.pa);
+  const body=cur?`<div class="win ${cur[0]==='bm'||cur[0]==='ul'||cur[0]==='pg'?'dark':''}"><div class="wt"><span>${cur[1]} ${cur[2]}</span><button data-a="pcapp" data-i="">✕</button></div><div class="wb">${cur[0]==='bm'?pcBm():cur[0]==='ul'?pcUl():cur[0]==='up'?pcUp():cur[0]==='pg'?pcPg():pcBuild()}</div></div>`
+   :`<div class="dki">${A.map(a=>`<button data-a="pcapp" data-i="${a[0]}"><i class="ic ${a[0]}">${IC(a[0])}</i>${a[2]}${a[0]==='ul'&&lk?`<em>${lk}</em>`:a[0]==='bm'&&(S.bm||[]).length?`<em>${S.bm.length}</em>`:a[0]==='pg'&&pgN()?`<em>${pgN()}</em>`:''}</button>`).join('')}</div>`;
+  return`<div class="dk">${body}<div class="tbar"><span>🪟 Мой ПК · ур. ${S.pc}</span><span>${run?'⏳ '+esc(nm(run)):'● свободен'}</span></div></div>`}
+function vSales(){
+  if(!S.sl.length)return'<div class="empty">Ничего не продаётся.<br>Открой «Склад», выбери устройство и нажми «Выставить на продажу». Покупатели напишут сами и будут торговаться.</div>';
+  return S.sl.map(l=>{const d=S.inv.find(x=>x.id===l.did);if(!d)return'';
+    const bs=l.bs.map(b=>{const m=b.msgs[b.msgs.length-1];return`<div class="df" data-a="bchat" data-i="${b.id}" data-j="${l.id}" style="cursor:pointer;${b.st==='g'?'opacity:.5':''}"><span style="display:flex;gap:10px;align-items:center">${av(b.who,38)}<span><b>${esc(b.who)}</b> ${rb(b.who)}${b.un?' <span class="ch on">новое</span>':''}<br><span class="mut">${esc(m?m.t.slice(0,60):'')}</span></span></span><span class="ch ${b.st==='g'?'bad':b.offer?'ok':''}">${b.st==='g'?'ушёл':b.offer?f(b.offer):'торгуется'}</span></div>`}).join('');
+    return`<div class="c"><div class="row"><h3>${nm(d)}</h3><span class="price">${f(l.ask)}</span></div><div class="mut">Оценка рынка ~${f(val(d))} · куплено за ${f(d.paid)}</div>${bs||'<div class="mut" style="margin:10px 0">⏳ Ждём покупателей…</div>'}<div class="acts"><button class="b g" data-a="unsell" data-i="${l.id}">Снять с продажи</button></div></div>`}).join('');
+}
+function vPlayers(){
+  const inp='width:100%;padding:10px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit;margin-top:8px';
+  return`<div class="c"><h3>👥 Игроки</h3><div class="mut">Укажите Telegram ID игрока. Команда придёт ему в течение ~10 сек.${API?'':' <b style="color:var(--bad)">Сервер не подключён (API пустой)</b>'}</div>
+<input id="plid" inputmode="numeric" placeholder="Telegram ID игрока" style="${inp}">
+<input id="plamt" inputmode="numeric" placeholder="Сумма, ₽" style="${inp}">
+<div class="acts"><button class="b ok" data-a="mplgive">➕ Выдать</button><button class="b bad" data-a="mpltake">➖ Забрать</button></div>
+<div class="acts"><button class="b g" data-a="mplzero">Обнулить баланс</button><button class="b g" data-a="mpllvl">+1 уровень</button></div>
+<div class="acts"><button class="b bad" data-a="mplreset">⚠️ Сбросить игрока</button></div></div>`}
+function plSend(type,amount){
+  const id=parseInt(($('#plid')||{}).value),n=parseInt((($('#plamt')||{}).value||'').replace(/\D/g,''))||0;
+  if(!id)return toast('Укажите ID игрока');
+  if((type==='give'||type==='take')&&n<1)return toast('Укажите сумму');
+  if(!API)return toast('Не задан адрес сервера (API)');
+  fetch(API+'/admin/player',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:INIT,target:id,type:type==='take'?'money':type==='give'?'money':type,amount:type==='take'?-n:n})})
+   .then(r=>{if(!r.ok)throw 0;toast('Отправлено игроку '+id)}).catch(()=>toast('Ошибка: сервер не принял команду'));
+}
+function pollCmd(){
+  if(!API||!TGID)return;
+  fetch(API+'/commands',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:INIT,ack:S.done})})
+   .then(r=>r.json()).then(cs=>{if(!Array.isArray(cs)||!cs.length)return;let ch=0;
+    cs.forEach(c=>{
+      if(c.id){if(S.done.includes(c.id))return;S.done.push(c.id);if(S.done.length>200)S.done.shift()}
+      ch=1;
+      if(c.type==='transfer'){const n=+c.amount||0;S.bal+=n;S.tx.unshift({d:Date.now(),k:'in',n,w:c.from||'игрок'});S.tx=S.tx.slice(0,20);toast('💸 '+(c.from||'Игрок')+' перевёл вам '+f(n))}
+      else if(c.type==='money'){S.bal=Math.max(0,S.bal+(+c.amount||0));toast((c.amount>0?'🎁 Админ выдал ':'Админ забрал ')+f(Math.abs(c.amount)))}
+      else if(c.type==='zero'){S.bal=0;toast('Админ обнулил ваш баланс')}
+      else if(c.type==='lvl'){S.exp+=100;toast('Админ повысил ваш уровень')}
+      else if(c.type==='market'){regen();toast('🔄 Админ обновил рынок')}
+      else if(c.type==='reset'){const dn=S.done,pd=S.pend;S=fresh();S.done=dn;S.pend=pd;regen();toast('Ваш прогресс сброшен админом')}
+    });
+    if(ch){save();render()}}).catch(()=>{});
+}
+function trFlush(){
+  if(!API||!TGID||trBusy||!S.pend.length)return;
+  const t=S.pend[0];trBusy=1;
+  fetch(API+'/transfer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:INIT,tid:t.tid,to:t.to,amount:t.n})})
+   .then(r=>r.json().catch(()=>({})).then(j=>{
+     if(r.ok&&j.ok){S.pend.shift();S.tx.unshift({d:Date.now(),k:'out',n:t.n,w:j.toName||t.name||String(t.to)});S.tx=S.tx.slice(0,20);toast('💸 Переведено '+f(t.n)+' → '+(j.toName||t.name||t.to));return}
+     if(r.status>=400&&r.status<500&&r.status!==408&&r.status!==429){S.bal+=t.n;S.pend.shift();toast('Перевод отклонён: '+(j.error||'ошибка')+' · деньги возвращены');return}
+     throw 0}))
+   .then(()=>{trBusy=0;save();render(1);if(S.pend.length)trFlush()})
+   .catch(()=>{trBusy=0});
+}
+function vAdmin(){
+  const ev=EVS.map((e,k)=>`<button class="b g" data-a="admev" data-i="${k}">${e.t}</button>`).join('');
+  return`<div class="c"><h3>${isMain()?'👑 Главный админ':'⚙️ Админ-панель'}</h3><div class="mut">${isMain()?'Ниже — управление игроками. Остальные инструменты действуют на этом устройстве.':'Видна только вам. Действует на этом устройстве.'}<div style="margin-top:6px">Ваш ID: <b>${TGID||'не определён'}</b> · роль: <b>${isMain()?'главный':'обычный'}</b> · версия 7 (частые поломки телефонов)</div></div></div>${isMain()?vPlayers():''}
+<div class="c"><h3>💰 Деньги</h3><div class="acts"><button class="b ok" data-a="admm" data-i="10000">+10 000</button><button class="b ok" data-a="admm" data-i="100000">+100 000</button></div><div class="acts"><button class="b bad" data-a="admm" data-i="-10000">−10 000</button><button class="b g" data-a="admz">Обнулить</button></div></div>
+<div class="c"><h3>🔄 Рынок</h3><div class="acts"><button class="b" data-a="admr">🔄 Себе</button><button class="b bad" data-a="admrall">🌍 Всем игрокам</button></div><div class="mut" style="margin-top:8px">Событие:</div><div style="display:grid;gap:6px;margin-top:6px">${ev}<button class="b g" data-a="admev" data-i="9">Без события</button></div></div>
+<div class="c"><h3>🎁 Выдать товар на склад</h3><select id="admsel" style="width:100%;padding:10px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit">${(()=>{const o=k=>`<option value="${k}">${I[k][0]} · ${f(I[k][1])}</option>`;const hi=KEYS.filter(k=>I[k][1]>=1e6).sort((a,b)=>I[a][1]-I[b][1]),lo=KEYS.filter(k=>I[k][1]<1e6);return`<optgroup label="💎 Элита — от 1 000 000 ₽ (${hi.length})">${hi.map(o).join('')}</optgroup><optgroup label="Остальные товары">${lo.map(o).join('')}</optgroup>`})()}</select><div class="acts"><button class="b" data-a="admadd" data-i="0">Со случайными дефектами</button><button class="b ok" data-a="admadd" data-i="1">Исправный</button></div></div>
+<div class="c"><h3>🛠 Прочее</h3><div class="acts"><button class="b g" data-a="admlv">+1 уровень</button><button class="b g" data-a="admbn">Сбросить таймер бонуса</button></div><div class="acts"><button class="b g" data-a="admsk">🤖 Навык прошивки на макс.</button></div></div>
+<div class="c"><h3>🔒 Блокировки и чаты</h3><div class="acts"><button class="b" data-a="admlk">🔒 Выдать заблок. iPhone</button><button class="b ok" data-a="admun">🔓 Разблок. склад</button></div><div class="acts"><button class="b g" data-a="admpc">ПК на макс.</button><button class="b g" data-a="admch">Очистить чаты</button></div><div class="mut" style="margin-top:8px">На рынке: ${S.mk.length} · заблокированных: ${S.mk.filter(l=>l.dev.lock).length} · диалогов: ${Object.keys(S.chat).length}</div></div>`;
+}
+function vSheet(){
+  if(!sheet)return'';
+  if(sheet.t==='tr')return vTr();
+  if(sheet.t==='dev'){
+    const d=S.inv.find(x=>x.id===sheet.id);if(!d)return'';
+    const kn=d.defs.length===0||d.defs[0].k;
+    return`<div class="ov" data-a="close"><div class="sh" data-a="stay"><h3>${nm(d)}</h3><div class="mut">Оценка: ${f(val(d))} · куплено за ${f(d.paid)}</div>`+vwBlock(d,kn)+unlBlock(d)+pgBlock(d)+rpBtn(d,kn)+
+    (d.broke?'<div class="chips"><span class="ch bad">💥 Сломано, годится только на запчасти</span></div>':kn?d.defs.map((x,i)=>`<div class="df"><span ${vdAttr(d,x,i)}>${x.fake?'🚫 Подделка':x.n}<br><span class="mut">${x.fake?'ремонту не подлежит':f(x.c)}</span></span>${x.fx?'<span class="ch ok">Починено</span>':x.fake?'':'<span class="ch">🔧 через разбор</span>'}</div>`).join('')||'<div class="chips"><span class="ch ok">Всё исправно</span></div>':`<div class="chips">${chips(d)}</div><button class="b g" data-a="diag" data-i="${d.id}" style="width:100%">🔍 Диагностика ${f(Math.max(500,r100(val(d)*.002)))}</button>`)+
+    `<div class="acts">${d.sale?'<button class="b g" data-a="tab" data-i="s">💬 Продаётся · к покупателям</button>':`<button class="b ok" data-a="sellopen" data-i="${d.id}">💬 Выставить на продажу</button>`}</div><div class="acts"><button class="b g" data-a="close">Закрыть</button></div></div></div>`;
+  }
+  if(sheet.t==='insp')return vInsp();
+  if(sheet.t==='ord'){
+    const o=S.ord.find(x=>x.id===sheet.id);if(!o)return'';
+    const ok=S.inv.filter(d=>d.key===o.key&&!d.sale&&!d.broke&&d.defs.every(x=>x.fx&&!x.fake));
+    return`<div class="ov" data-a="close"><div class="sh" data-a="stay"><h3>Заказ: ${I[o.key][0]}</h3><div class="mut">Награда ${f(o.reward)}</div>`+(ok.length?ok.map(d=>`<div class="df"><span>${nm(d)}<br><span class="mut">${d.defs.length?'отремонтировано':'без дефектов'}</span></span><button class="b ok" data-a="give" data-i="${d.id}">Отдать</button></div>`).join(''):'<div class="empty">На складе нет подходящего исправного устройства.</div>')+`<div class="acts"><button class="b g" data-a="close">Закрыть</button></div></div></div>`;
+  }
+  if(sheet.t==='ask'){
+    const d=S.inv.find(x=>x.id===sheet.id);if(!d)return'';const v=val(d);if(!sheet.p)sheet.p=r100(v*1.15);
+    return`<div class="ov" data-a="close"><div class="sh" data-a="stay"><h3>Выставить: ${nm(d)}</h3><div class="mut">Оценка рынка ~${f(v)} · куплено за ${f(d.paid)}. Покупатели сами напишут и будут торговаться: чем выше цена, тем реже пишут. Комиссия площадки ${Math.round(BAL.fee*100)}%.</div><div class="flt" style="padding:10px 0 8px"><span class="ch" data-a="pset" data-i="${r100(v)}">Рынок</span><span class="ch" data-a="pset" data-i="${r100(v*1.1)}">+10%</span><span class="ch" data-a="pset" data-i="${r100(v*1.25)}">+25%</span><span class="ch" data-a="pset" data-i="${r100(v*1.5)}">+50%</span></div><input id="pin" inputmode="numeric" value="${sheet.p}" style="width:100%;padding:11px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit"><div class="acts"><button class="b ok" data-a="sellgo" data-i="${d.id}">Выставить</button><button class="b g" data-a="close">Отмена</button></div></div></div>`;
+  }
+  if(sheet.t==='bc'){
+    const l=S.sl.find(x=>x.id===sheet.l),b=l&&l.bs.find(x=>x.id===sheet.b),d=l&&S.inv.find(x=>x.id===l.did);if(!d||!b)return'';b.un=0;
+    const g=b.st==='g',QB=[['Скинуть 5%','c5'],['Скинуть 10%','c10'],['Цена та же','hold'],['Нужна предоплата','pre'],['Отказать','no']];
+    return`<div class="ov" data-a="close"><div class="sh" data-a="stay"><div class="row"><h3 style="display:flex;gap:8px;align-items:center">${av(b.who,36)}<span>${esc(b.who)} · ${nm(d)}</span></h3><span class="price">${f(l.ask)}</span></div><div id="msgs" style="display:grid;gap:6px;margin:10px 0;max-height:34vh;overflow:auto">${b.msgs.map(x=>bub(x,b.who)).join('')}</div>`+
+    (g?'<div class="mut" style="margin-bottom:8px">Покупатель ушёл.</div>':`<div class="flt" style="padding:0 0 8px">${QB.map(q=>`<span class="ch" data-a="bq" data-i="${b.id}" data-j="${l.id}" data-k="${q[1]}">${q[0]}</span>`).join('')}</div><div class="row"><input id="cin" placeholder="Ваша цена или сообщение…" style="flex:1;padding:11px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit"><button class="b" data-a="bsend" data-i="${b.id}" data-j="${l.id}">➤</button></div>`+(b.offer?`<div class="acts"><button class="b ok" data-a="bacc" data-i="${b.id}" data-j="${l.id}">Продать за ${f(b.offer)}</button></div>`:''))+`<div class="acts"><button class="b g" data-a="close">Закрыть</button></div></div></div>`;
+  }
+  if(sheet.t==='chat'){
+    const l=S.mk.find(x=>x.id===sheet.id);if(!l)return'';
+    const m=S.chat[l.id]||[];
+    return`<div class="ov" data-a="close"><div class="sh" data-a="stay"><div class="row"><h3 style="display:flex;gap:8px;align-items:center">${av(l.who,36)}<span>${esc(l.who)} · ${nm(l.dev)}</span></h3><span class="price">${f(l.price)}</span></div><div id="msgs" style="display:grid;gap:6px;margin:10px 0;max-height:34vh;overflow:auto">${m.length?m.map(x=>bub(x,l.who)).join(''):'<div class="mut">Напишите продавцу первым: поторгуйтесь или спросите про состояние. Продавцы иногда приукрашивают.</div>'}</div><div class="flt" style="padding:0 0 8px">${Q.map((q,k)=>`<span class="ch" data-a="q" data-i="${l.id}" data-j="${k}">${q[0]}</span>`).join('')}</div><div class="row"><input id="cin" placeholder="Сообщение или ваша цена…" style="flex:1;padding:11px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit"><button class="b" data-a="send" data-i="${l.id}">➤</button></div><div class="acts"><button class="b ok" data-a="buy" data-i="${l.id}">Купить за ${f(l.price)}</button><button class="b g" data-a="close">Закрыть</button></div></div></div>`;
+  }
+  return'';
+}
+function unlBlock(d){
+  if(!d.lock)return'';
+  if(!S.own)return`<div class="c" style="margin:10px 0"><b>🔒 Нужен ПК для разблокировки</b><div class="mut">Купите свой ПК во вкладке 🖥 за ${f(PCBUY)}.</div><button class="b" data-a="tab" data-i="c" style="width:100%;margin-top:8px">К покупке ПК</button></div>`;
+  const w=d.ul?100-(d.ul-Date.now())/(pcT()*10):0;
+  return`<div class="c" style="margin:10px 0"><b>🔓 Разблокировка через ПК · ур. ${S.pc}</b><div class="mut">Ручная перепрошивка: DFU, прошивка, активация · софт 300 ₽.</div>${d.ul?`<div class="bar"><i style="width:${w}%"></i></div>`:''}<button class="b" data-a="pcapp" data-i="ul" style="width:100%;margin-top:8px">🖥 Открыть программу на ПК</button></div>`;
+}
+function ask(l,txt,kind){
+  const c=S.chat[l.id]=S.chat[l.id]||[],d=l.dev,s=txt.toLowerCase();
+  c.push({me:1,t:txt});
+  if(l.min==null)l.min=r100(l.price*R(.8,.93));
+  if(l.liar==null)l.liar=Math.random()<(rt(l.who)<4?.65:.2);
+  l.n=(l.n||0)+1;
+  const num=parseInt((s.replace(/\s/g,'').match(/\d{3,}/)||[0])[0]);
+  const k=kind||(num?'num':/дефект|проблем|состоян|царап|разб/.test(s)?'def':/подд|оригин/.test(s)?'fake':/скидк|торг|уступ|дешев/.test(s)?'b10':/послед|крайн/.test(s)?'last':/блок|разблок/.test(s)?'lock':/привет|здравств|добр/.test(s)?'hi':'?');
+  const fake=d.defs.some(x=>x.fake),list=d.defs.map(x=>x.n.toLowerCase()).join(', ');let r;
+  if(l.n>7&&/^(b10|b20|num|last)$/.test(k))r='Мне надоело торговаться. Берёте или нет?';
+  else if(k==='hi')r='Здравствуйте! Устройство в наличии, спрашивайте.';
+  else if(k==='lock')r=d.lock?'Да, заблокирован, поэтому цена низкая. Кто умеет разблокировать, тот в плюсе.':'Нет, без блокировок.';
+  else if(k==='def'||k==='fake'){
+    if(l.liar&&d.defs.length)r=k==='fake'?'Оригинал, конечно. Чек потерял.':'Состояние отличное, пара мелочей, не критично.';
+    else if(!d.defs.length)r=k==='fake'?'Оригинал, без вопросов.':'Всё исправно, как новое.';
+    else{d.defs.forEach(x=>x.k=1);r=fake?'Честно: это копия, поэтому и цена ниже.':'Есть: '+list+'.'}
+  }
+  else if(k==='last'){const p=r100(l.min*1.03);if(p<l.price){l.price=p;r='Последняя цена: '+f(p)+'.'}else r='Цена уже минимальная.'}
+  else if(k==='?')r='Не совсем понял. Могу рассказать про дефекты, цену и торг.';
+  else{const p=k==='b10'?l.price*.9:k==='b20'?l.price*.8:num;
+    if(p>=l.price)r='Хорошо, цена остаётся '+f(l.price)+'.';
+    else if(p>=l.min){l.price=r100(p);r='Ладно, уговорили: '+f(l.price)+'.'}
+    else if(p>=l.min*.92)r='Ниже '+f(r100(l.min*1.03))+' не отдам.';
+    else r='Это несерьёзно 🙂'}
+  setTimeout(()=>{c.push({me:0,t:r});if(sheet&&sheet.t==='chat'&&sheet.id===l.id)render();else toast('💬 '+l.who+': '+r)},650);
+}
+const rt=n=>3.4+(hs(n)%17)/10,dl=n=>12+hs(n)%240;
+const rb=n=>`<span class="ch ${rt(n)>=4.5?'ok':rt(n)<4?'bad':''}">⭐ ${rt(n).toFixed(1)} · ${dl(n)} сделок</span>`;
+const tr=k=>{const x=S.dd[k]||0;return Math.abs(x)>=.01?`<span class="ch">${x>0?'📈 +':'📉 '}${Math.round(x*100)}% за цикл</span>`:''};
+const rent=()=>60*S.cap,capCost=()=>3000*(S.cap-6)**2,taxOf=()=>Math.round(Math.max(0,S.bal-5e4)*.015);
+const worth=()=>S.bal+S.inv.reduce((a,d)=>a+val(d),0);
+const full=n=>S.inv.length+n>S.cap?(toast('📦 Склад полон ('+S.inv.length+'/'+S.cap+'). Расширьте его во вкладке «Склад»'),1):0;
+function upkeep(){const c=Math.min(S.bal,rent()+taxOf());S.bal-=c;return c}
+const COMP=['Перекуп_Макс','Avito_Pro','Барыга Витя','Phone_Hunter'];
+function compTick(){
+  if(!S.cn){S.cn=Date.now()+30000;return}
+  if(Date.now()<S.cn)return;
+  S.cn=Date.now()+RI(Math.max(12,40-3*lvl()),Math.max(25,70-4*lvl()))*1000;
+  if(Math.random()<.25)return;
+  const op=sheet&&sheet.t==='chat'?sheet.id:0,L=S.mk.filter(x=>x.id!==op).sort((a,b)=>a.price/val(a.dev)-b.price/val(b.dev));
+  if(L.length){const x=L[0];S.mk=S.mk.filter(y=>y!==x);toast('🏃 '+P(COMP)+' выкупил '+nm(x.dev)+' за '+f(x.price))}
+  else if(S.lots.length&&Math.random()<.3){const x=P(S.lots);S.lots=S.lots.filter(y=>y!==x);toast('🏃 '+P(COMP)+' забрал лот «'+x.name+'»')}
+  if(S.tab==='m'||S.tab==='l')render(1);
+}
+/* ===== 🔧 Мастерская: улучшения ремонта ===== */
+const WS=[['sol','🔥','Паяльная станция','Меньше шанс сломать устройство при неудачном ремонте',3000],['orig','🧩','Оригинальные запчасти','Меньше риск неудачи при замене детали',4000],['sup','🏷','Поставщик деталей','Скидка на новые детали',5000],['crs','📚','Курсы мастера','Больше опыта за каждый ремонт',2500]];
+const WSM=5,wsL=k=>(S.ws&&S.ws[k])||0,wsCost=k=>WS.find(w=>w[0]===k)[4]*(wsL(k)+1)**2;
+const critP=()=>Math.max(.05,.3-.05*wsL('sol')),partCost=x=>Math.round(x.c*(1-.04*wsL('sup'))),repXp=()=>Math.round(10*(1+.25*wsL('crs')));
+const wsFx={sol:n=>'Крит. поломка при неудаче: '+Math.round(Math.max(.05,.3-.05*n)*100)+'%',orig:n=>'Риск неудачи: −'+(n*2.5)+' п.п.',sup:n=>'Цена деталей: −'+n*4+'%',crs:n=>'Опыт за ремонт: +'+n*25+'%'};
+function vWS(){const tot=WS.reduce((a,w)=>a+wsL(w[0]),0),op=S.wso;
+  const head=`<div class="row" data-a="wstog" style="cursor:pointer"><div><b>🔧 Мастерская</b><div class="mut">Улучшения ремонта · ${tot}/${WS.length*WSM}</div></div><span class="ch">${op?'Скрыть':'Открыть'}</span></div>`;
+  if(!op)return`<div class="c">${head}</div>`;
+  return`<div class="c">${head}`+WS.map(w=>{const k=w[0],n=wsL(k),mx=n>=WSM;return`<div style="margin-top:12px"><div class="row"><div style="min-width:0"><b>${w[1]} ${w[2]}</b> <span class="mut">ур. ${n}/${WSM}</span><div class="mut" style="font-size:12px">${w[3]}</div><div style="font-size:12px;font-weight:600">${wsFx[k](n)}${mx?'':' → '+wsFx[k](n+1)}</div></div><button class="b" data-a="wsup" data-k="${k}" ${mx?'disabled':''}>${mx?'Максимум':f(wsCost(k))}</button></div><div class="bar"><i style="width:${n/WSM*100}%"></i></div></div>`}).join('')+`</div>`}
+const ACH=[['s1','🥇','Первая сделка','Продайте 1 устройство',()=>S.sold>=1,500],['s10','🔟','Опытный продавец','10 продаж',()=>S.sold>=10,2000],['s50','🏅','Профи','50 продаж',()=>S.sold>=50,10000],['f10','🔧','Мастер ремонта','Почините 10 дефектов',()=>S.fixed>=10,3000],['l5','🛠','Уровень 5','Достигните 5 уровня',()=>lvl()>=5,5000],['pc','🖥','Свой ПК','Купите или соберите ПК',()=>S.own,2000],['cap','📦','Большой склад','16 мест на складе',()=>S.cap>=16,5000],['e100','💰','Первые 100 тысяч','Прибыль 100 000 ₽',()=>S.earn>=1e5,10000],['m1','💎','Миллионер','Капитал 1 000 000 ₽',()=>worth()>=1e6,50000],['rep','⭐','Надёжный','Репутация 150',()=>S.rep>=150,5000],['big','👑','Элита','Продайте устройство дороже 1 000 000 ₽',()=>(S.big||0)>=1,30000],['m10','🏦','Мультимиллионер','Капитал 10 000 000 ₽',()=>worth()>=1e7,150000],['ws','🛠','Мастерская мечты','Прокачайте все улучшения мастерской',()=>WS.every(w=>wsL(w[0])>=WSM),30000]];
+function checkAch(){let g=0;ACH.forEach(a=>{if(!S.ach[a[0]]&&a[4]()){S.ach[a[0]]=1;S.bal+=a[5];g=1;toast('🏆 '+a[2]+' · +'+f(a[5]))}});return g}
+function vAch(){return`<div class="c"><h3>🏆 Достижения ${Object.keys(S.ach).length}/${ACH.length}</h3>`+ACH.map(a=>`<div class="df" style="${S.ach[a[0]]?'':'opacity:.55'}"><span>${S.ach[a[0]]?a[1]:'🔒'} <b>${a[2]}</b><br><span class="mut">${a[3]}</span></span><span class="ch ${S.ach[a[0]]?'ok':''}">${S.ach[a[0]]?'получено':'+'+f(a[5])}</span></div>`).join('')+'</div>'}
+const BOTS=[['Artem_flip',9],['Марат',7],['PhoneKing',12],['Dasha_tech',6],['Сергей_опт',10],['Lena88',5]];
+function fetchTop(){if(!API||!TGID)return;fetch(API+'/top',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:INIT,worth:Math.round(worth()),name:TGN})}).then(r=>r.json()).then(j=>{if(j&&j.top){TOP=j.top;TOPME=j.me||null;if(S.tab==='p')render(1)}}).catch(()=>{})}
+function trRow(x,rank){const md=rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':rank;
+  return`<div class="df" style="${x.me?'font-weight:800':''}"><span style="display:flex;gap:8px;align-items:center;min-width:0"><span style="min-width:22px;text-align:center">${md}</span>${av(x.n,28)}<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(x.n)}${x.me?' (вы)':''}</span></span><span style="display:flex;gap:8px;align-items:center;white-space:nowrap">${f(x.w)}${TOP&&x.id&&!x.me?`<button class="b g" style="padding:6px 10px" data-a="trto" data-i="${x.id}" data-n="${esc(x.n)}">💸</button>`:''}</span></div>`}
+function vTop(){const m=(Date.now()-S.t0)/6e4;
+  let L=TOP?TOP.map(x=>({id:x.id,n:x.name,w:x.worth,me:x.me})):BOTS.map(b=>({n:b[0],w:Math.round(3e4+b[1]*600*Math.pow(m,.9)*(.9+hs(b[0])%20/100))})).concat([{n:TGN||'Вы',w:Math.round(worth()),me:1}]);
+  L.sort((a,b)=>b.w-a.w);
+  let rows=L.slice(0,10).map((x,i)=>trRow(x,i+1)).join('');
+  if(TOP&&TOPME&&TOPME.rank>10)rows+='<div class="mut" style="text-align:center;padding:4px">⋯</div>'+trRow({n:TGN||'Вы',w:Math.round(worth()),me:1},TOPME.rank);
+  const note=TOP?(TOPME?' · ваше место: '+TOPME.rank+' из '+TOPME.total:''):' · сервер не подключён, сравнение с ботами';
+  return`<div class="c"><h3>🏆 Топ перекупов</h3><div class="mut">Капитал = деньги + стоимость склада${note}</div>`+rows+'</div>'+vTrCard()}
+function vTrCard(){
+  const h=S.pend.map(t=>`<div class="df"><span>⏳ → ${esc(t.name||t.to)}<br><span class="mut">отправляется…</span></span><b>−${f(t.n)}</b></div>`).concat(S.tx.slice(0,5).map(x=>`<div class="df"><span>${x.k==='in'?'⬇️ от ':'⬆️ для '}${esc(x.w)}<br><span class="mut">${new Date(x.d).toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span></span><b style="color:var(--${x.k==='in'?'ok':'bad'})">${x.k==='in'?'+':'−'}${f(x.n)}</b></div>`)).join('');
+  return`<div class="c"><h3>💸 Переводы игрокам</h3><div class="mut">Нажмите 💸 рядом с игроком в рейтинге или введите его Telegram ID. Ваш ID: <b>${TGID||'—'}</b>${API&&TGID?'':' · <b style="color:var(--bad)">доступно в Telegram при подключённом сервере</b>'}</div><div class="acts"><button class="b" data-a="trto" data-i="0" data-n="">Перевести по ID</button></div>${h}</div>`}
+function vTr(){
+  const inp='width:100%;padding:11px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit;margin-top:8px';
+  return`<div class="ov" data-a="close"><div class="sh" data-a="stay"><h3>💸 Перевод денег</h3><div class="mut">Баланс: ${f(S.bal)} · минимум ${f(TR_MIN)}. Деньги спишутся сразу, у получателя появятся в течение ~10 секунд.</div>`+
+  (sheet.id?`<div class="df"><span style="display:flex;gap:8px;align-items:center">${av(sheet.name,28)}${esc(sheet.name)}</span><span class="mut">ID ${sheet.id}</span></div>`:`<input id="trid" inputmode="numeric" placeholder="Telegram ID получателя" value="${esc(sheet.rid||'')}" style="${inp}">`)+
+  `<input id="tramt" inputmode="numeric" placeholder="Сумма, ₽" value="${sheet.amt||''}" style="${inp}"><div class="flt" style="padding:10px 0 4px">${[1000,5000,10000,50000].map(v=>`<span class="ch" data-a="trset" data-i="${v}">${f(v)}</span>`).join('')}</div><div class="acts"><button class="b ok" data-a="trgo">Отправить</button><button class="b g" data-a="close">Отмена</button></div></div></div>`}
+function render(k){
+  const keep=k?['cin','pin','trid','tramt'].map(id=>{const e=document.getElementById(id);return e?[id,e.value,document.activeElement===e]:0}).filter(Boolean):[];
+  const T={m:vMarket,i:vInv,s:vSales,l:vLots,o:vOrd,p:vProf,c:vPc,a:vAdmin},N=[['m','search','Рынок'],['i','box','Склад'],['s','chat','Продажи'],['l','case','Лоты'],['c','pc','ПК']];if(S.tab==='o')S.tab='m';
+  if(isAdm())N.push(['a','gear','Админ']);else if(S.tab==='a')S.tab='m';
+  $('#app').innerHTML=hdr()+T[S.tab]()+vSheet()+`<nav>${N.map(n=>`<button class="${S.tab===n[0]?'on':''}" data-a="tab" data-i="${n[0]}"><i>${IC(n[1])}</i>${n[2]}${n[0]==='i'&&S.inv.length?`<em>${S.inv.length}</em>`:n[0]==='s'&&unread()?`<em>${unread()}</em>`:''}</button>`).join('')}</nav>`;
+  save();const mg=$('#msgs');if(mg)mg.scrollTop=mg.scrollHeight;afterRender();
+  keep.forEach(x=>{const e=document.getElementById(x[0]);if(e){e.value=x[1];if(x[2])e.focus()}});
+}
+function lose(n){if(S.bal<n){toast('Не хватает денег');return 1}S.bal-=n}
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-a]');if(!t)return;
+  const a=t.dataset.a,i=+t.dataset.i,j=+t.dataset.j;
+  if(a==='stay')return;
+  if(a==='tab'){S.tab=t.dataset.i;sheet=null}
+  else if(a==='flt')S.flt=t.dataset.i;
+  else if(a==='close')sheet=null;
+  else if(a==='insp'){const l=S.mk.find(x=>x.id===i);if(l&&!lose(Math.max(500,r100(l.price*.002)))){l.dev.defs.forEach(x=>x.k=1);toast('Диагностика завершена');
+    if(hasView(l.dev.key)){const s0=sheet&&sheet.t==='insp'&&sheet.id===i?sheet:{t:'insp',id:i,ang:0},fi=l.dev.defs.findIndex(x=>defSide(x)!=null);s0.hl=fi>=0?fi:null;
+      if(fi>=0&&defSide(l.dev.defs[fi])!==sideOf(s0.ang))vgo(s0,defSide(l.dev.defs[fi]));sheet=s0}}}
+  else if(a==='look'){if(S.mk.some(x=>x.id===i))sheet={t:'insp',id:i,ang:0,hl:null}}
+  else if(a==='vside'||a==='vflip'){if(sheet){const c=sideOf(sheet.ang),w=a==='vflip'?1-c:+t.dataset.k;vgo(sheet,w)}}
+  else if(a==='vedge'){if(sheet){const x=sheet.ang||0;sheet.from=x;sheet.frx=sheet.rx||0;sheet.ang=Math.round((x-90)/180)*180+90;sheet.rx=0}}
+  else if(a==='vdef'){if(sheet){const w=+t.dataset.k,c=sideOf(sheet.ang);sheet.hl=i;vgo(sheet,w)}}
+  else if(a==='buy'){const l=S.mk.find(x=>x.id===i);if(l&&!full(1)&&!lose(l.price)){l.dev.paid=l.price;S.inv.push(l.dev);S.mk=S.mk.filter(x=>x!==l);sheet=null;toast('Куплено: '+nm(l.dev))}}
+  else if(a==='peek'){const l=S.lots.find(x=>x.id===i);if(l&&!lose(400))l.peek=1}
+  else if(a==='lot'){const l=S.lots.find(x=>x.id===i);if(l&&!full(l.items.length)&&!lose(l.price)){l.items.forEach(d=>{d.paid=Math.round(l.price/l.items.length);S.inv.push(d)});S.lots=S.lots.filter(x=>x!==l);toast('Открыто! Внутри предметов: '+l.items.length+', стоимость ~'+f(l.sum))}}
+  else if(a==='dev')sheet={t:'dev',id:i};
+  else if(a==='diag'){const d=S.inv.find(x=>x.id===i);if(d&&!lose(Math.max(500,r100(val(d)*.002)))){d.defs.forEach(x=>x.k=1);d.offer=0}}
+  else if(a==='rep'){const dd=S.inv.find(x=>x.id===i);/* прямой ремонт отключён: только через вскрытие */}
+  else if(a==='rpopen'){rpOpen(i);return}
+  else if(a==='sellopen'){const d=S.inv.find(x=>x.id===i);if(d&&d.pu)toast('Идёт прошивка, подождите');else if(d&&!d.sale)sheet={t:'ask',id:i,p:0}}
+  else if(a==='pset'){if(sheet&&sheet.t==='ask')sheet.p=i}
+  else if(a==='sellgo'){const d=S.inv.find(x=>x.id===i),e=$('#pin'),p=e?parseInt(e.value.replace(/\D/g,''))||0:0;
+    if(d&&!d.sale){if(p<100)toast('Укажите цену');else{const l={id:++S.uid,did:d.id,ask:p,nb:Date.now()+RI(4,9)*1000,bs:[]};S.sl.push(l);d.sale=l.id;sheet=null;S.tab='s';toast('Выставлено за '+f(p)+'. Ждите покупателей')}}}
+  else if(a==='unsell'){const l=S.sl.find(x=>x.id===i);if(l){const d=S.inv.find(x=>x.id===l.did);if(d)d.sale=0;S.sl=S.sl.filter(x=>x!==l);sheet=null;toast('Снято с продажи')}}
+  else if(a==='bchat'){const l=S.sl.find(x=>x.id===j),b=l&&l.bs.find(x=>x.id===i);if(b){b.un=0;sheet={t:'bc',l:j,b:i}}}
+  else if(a==='bq'){const l=S.sl.find(x=>x.id===j),b=l&&l.bs.find(x=>x.id===i);
+    if(b&&b.st!=='g'){const k=t.dataset.k,b0=b.cp||l.ask;
+      if(k==='no')bTalk(l,b,'Извините, продам другому.','no',0);
+      else if(k==='pre')bTalk(l,b,'Мне нужна предоплата, иначе не отдам.','pre',0);
+      else{const p=k==='c5'?r100(b0*.95):k==='c10'?r100(b0*.9):b0;bTalk(l,b,(k==='hold'?'Моя цена: ':'Уступлю: ')+f(p),'n',p)}}}
+  else if(a==='bsend'){const l=S.sl.find(x=>x.id===j),b=l&&l.bs.find(x=>x.id===i),e=$('#cin'),v=e&&e.value.trim();
+    if(b&&v&&b.st!=='g'){e.value='';const n=parseInt(((v.replace(/\s/g,'').match(/\d{3,}/))||[0])[0])||0;bTalk(l,b,v,'n',n)}}
+  else if(a==='bacc'){const l=S.sl.find(x=>x.id===j),b=l&&l.bs.find(x=>x.id===i);if(b&&b.offer&&b.st!=='g')doSale(l,b)}
+  else if(a==='bself'){const o=bdInfo();if(o.all&&!o.err&&(!S.own||o.lv>S.pc)){const ids=SLOTS.map(s=>o.p[s[0]].id);S.inv=S.inv.filter(x=>!ids.includes(x.id));S.bd={};S.own=1;S.pc=o.lv;toast('🖥 Собран ваш ПК, ур. '+o.lv)}}
+  else if(a==='bsale'){const o=bdInfo();if(o.all&&!o.err){const ids=SLOTS.map(s=>o.p[s[0]].id),g=I[o.p.gpu.key][0].replace(/^\S+\s/,'');S.inv=S.inv.filter(x=>!ids.includes(x.id));S.bd={};
+    S.inv.push({id:++S.uid,key:'custom',defs:[],paid:o.paid,broke:0,offer:0,lock:0,ul:0,nm:'🖥 Сборка · '+g,bv:o.val});toast('🖥 Собрано: сборка · '+g+', на складе')}}
+  else if(a==='ordp')sheet={t:'ord',id:i};
+  else if(a==='give'){const o=S.ord.find(x=>x.id===sheet.id),d=S.inv.find(x=>x.id===i);
+    if(o&&d){S.bal+=o.reward;S.earn+=o.reward-d.paid;S.rep+=2;const xp=gain(RI(15,25));S.sold++;S.inv=S.inv.filter(x=>x!==d);S.ord=S.ord.filter(x=>x!==o);sheet=null;toast('Заказ выполнен: +'+f(o.reward)+', репутация +2 · '+xp)}}
+  else if(a==='trto'){if(!API||!TGID)toast('Переводы доступны в Telegram при подключённом сервере');else sheet={t:'tr',id:i||0,name:t.dataset.n||''}}
+  else if(a==='trset'){if(sheet&&sheet.t==='tr'){sheet.amt=i;const e=$('#trid');if(e&&!sheet.id)sheet.rid=e.value}}
+  else if(a==='trgo'){if(sheet&&sheet.t==='tr'){const to=sheet.id||parseInt((($('#trid')||{}).value||'').replace(/\D/g,''))||0,n=parseInt((($('#tramt')||{}).value||'').replace(/\D/g,''))||0;
+    if(!to)toast('Укажите ID получателя');else if(to===TGID)toast('Нельзя перевести самому себе');else if(n<TR_MIN)toast('Минимум '+f(TR_MIN));
+    else if(!lose(n)){S.pend.push({tid:TGID+'-'+Date.now().toString(36)+Math.random().toString(36).slice(2,8),to,n,name:sheet.name});sheet=null;toast('💸 Отправляем '+f(n)+'…');trFlush()}}}
+  else if(a.startsWith('mpl')){if(!isMain())return;
+    if(a==='mplgive')plSend('give');else if(a==='mpltake')plSend('take');
+    else if(a==='mplzero')plSend('zero');else if(a==='mpllvl')plSend('lvl');
+    else if(a==='mplreset'){if(confirm('Сбросить прогресс игрока?'))plSend('reset')}}
+  else if(a.startsWith('adm')){if(!isAdm())return;
+    if(a==='admm'){S.bal=Math.max(0,S.bal+i);toast('Баланс: '+f(S.bal))}
+    else if(a==='admz'){S.bal=0;toast('Баланс обнулён')}
+    else if(a==='admr'){regen();toast('Рынок обновлён')}
+    else if(a==='admrall'){if(!API||!TGID)toast('Нужен Telegram и подключённый сервер');else if(confirm('Обновить рынок у ВСЕХ игроков?')){regen();toast('Рынок обновлён у вас, отправляю всем…');fetch(API+'/admin/broadcast',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:INIT,type:'market'})}).then(r=>{if(!r.ok)throw 0;toast('🌍 Команда отправлена всем игрокам')}).catch(()=>toast('Ошибка: сервер не принял команду'))}}
+    else if(a==='admev'){S.ev=EVS[i]||null;toast(S.ev?'Событие включено':'Событие выключено')}
+    else if(a==='admadd'){const k=($('#admsel')||{}).value;if(I[k]){const d=mk(k);if(i===1)d.defs=[];d.paid=0;S.inv.push(d);toast('Выдано: '+I[k][0])}}
+    else if(a==='admlv'){S.exp=50*(lvl()+1)*lvl();toast('Уровень: '+lvl())}
+    else if(a==='admsk'){S.skx=60;toast('Навык программирования: ур. 5')}
+    else if(a==='admbn'){S.bonus=0;toast('Бонус доступен')}
+    else if(a==='admlk'){const d=mk(P([...LK]));d.paid=0;S.inv.push(d);toast('Выдан заблокированный iPhone')}
+    else if(a==='admun'){S.inv.forEach(d=>{d.lock=0;d.ul=0;d.offer=0});toast('Склад разблокирован')}
+    else if(a==='admpc'){S.pc=6;S.own=1;toast('ПК: ур. 6')}
+    else if(a==='admch'){S.chat={};toast('Чаты очищены')}}
+  else if(a==='chat')sheet={t:'chat',id:i};
+  else if(a==='q'){const l=S.mk.find(x=>x.id===i);if(l)ask(l,Q[j][0],Q[j][1])}
+  else if(a==='send'){const l=S.mk.find(x=>x.id===i),v=($('#cin')||{}).value;if(l&&v&&v.trim())ask(l,v.trim())}
+  else if(a==='unl'){rfOpen(i);return}
+  else if(a==='pgv'){S.pv=i}
+  else if(a==='pgrun'){raOpen(i);return}
+  else if(a==='pcup'){if(S.own&&S.pc<6&&!lose(pcCost())){S.pc++;toast('🖥 ПК улучшен до ур. '+S.pc)}}
+  else if(a==='pcbuy'){if(!S.own&&!lose(PCBUY)){S.own=1;S.pc=1;toast('🖥 ПК куплен')}}
+  else if(a==='bmb'){const l=(S.bm||[]).find(x=>x.id===i);if(l&&S.own&&!full(1)&&!lose(l.price)){S.bm=S.bm.filter(x=>x!==l);
+    if(Math.random()<scam())toast('🕶 Кинули! '+l.who+' пропал с '+f(l.price));
+    else{l.dev.paid=l.price;S.inv.push(l.dev);toast('Куплено на чёрном рынке: '+nm(l.dev))}}}
+  else if(a==='pcapp'){S.pa=t.dataset.i||null;S.tab='c';sheet=null}
+  else if(a==='wstog')S.wso=S.wso?0:1;
+  else if(a==='wsup'){const k=t.dataset.k,w=WS.find(x=>x[0]===k);if(w&&wsL(k)<WSM&&!lose(wsCost(k))){S.ws=S.ws||{};S.ws[k]=wsL(k)+1;toast('🔧 '+w[2]+' · ур. '+S.ws[k])}}
+  else if(a==='capup'){if(S.cap<30&&!lose(capCost())){S.cap+=2;toast('📦 Склад расширен: '+S.cap+' мест')}}
+  else if(a==='bonus'){S.bal+=BAL.bonus;S.bonus=Date.now();toast('🎁 +'+f(BAL.bonus))}
+  else if(a==='theme'){const h=document.documentElement,dk=h.dataset.theme==='dark'||(!h.dataset.theme&&matchMedia('(prefers-color-scheme:dark)').matches);h.dataset.theme=dk?'light':'dark'}
+  else if(a==='reset'){if(!arm){arm=true;setTimeout(()=>{arm=false;render()},3000)}else{arm=false;const dn=S.done,pd=S.pend;S=fresh();S.done=dn;S.pend=pd;regen();toast('Игра сброшена')}}
+  render();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='cin'){e.preventDefault();const b=document.querySelector('[data-a=send],[data-a=bsend]');if(b)b.click()}});
+document.addEventListener('change',e=>{const s=e.target.closest&&e.target.closest('select[data-b]');if(s){S.bd[s.dataset.b]=+s.value||0;render()}});
+setInterval(()=>{
+  tickSales();compTick();if(checkAch())render(1);
+  S.inv.forEach(d=>{if(d.ul){const left=d.ul-Date.now();if(left<=0){d.ul=0;if(Math.random()<pcP()){d.lock=0;d.offer=0;S.ulr='✅ '+nm(d)+': разблокирован, цена выросла';toast('🔓 Разблокирован: '+nm(d)+', цена выросла · '+gain(15))}else{S.ulr='❌ '+nm(d)+': сбой, софт потрачен';toast('❌ Сбой разблокировки, софт потрачен')}render()}else{const b=$('#ulb');if(b)b.style.width=(100-left/(pcT()*10))+'%';if(S.tab==='c'&&S.pa==='ul')render(1)}}});
+  S.inv.forEach(d=>{if(d.pu){const left=d.pu-Date.now();if(left<=0){pgDone(d);render()}else{const b=$('#pgb');if(b)b.style.width=(100-left/(d.pt*10))+'%';if(S.tab==='c'&&S.pa==='pg')render(1)}}});
+  if(Date.now()>=S.next){const u=upkeep();regen();toast('🔄 Рынок обновился'+(u?' · расходы '+f(u):''));render();return}
+  const l=Math.max(0,Math.ceil((S.next-Date.now())/1000)),e=$('#cd');
+  if(e)e.textContent=Math.floor(l/60)+':'+String(l%60).padStart(2,'0');
+},1000);
+try{const sc=document.createElement('script');sc.src='https://telegram.org/js/telegram-web-app.js';sc.async=true;sc.onload=()=>{try{const w=window.Telegram&&window.Telegram.WebApp;if(w){try{TGID=Number(w.initDataUnsafe.user.id)||0;TGN=w.initDataUnsafe.user.first_name||'';INIT=w.initData||''}catch(e){}w.ready();w.expand();try{w.disableVerticalSwipes()}catch(e){}try{w.setHeaderColor('#2f7bff')}catch(e){}if(API&&TGID)cloudLoad();else render()}}catch(e){}};document.head.appendChild(sc)}catch(e){}
+setInterval(pollCmd,10000);setInterval(fetchTop,30000);setTimeout(fetchTop,4000);setTimeout(pollCmd,2500);setInterval(trFlush,8000);setTimeout(trFlush,3000);
+let dg=null;
+document.addEventListener('pointerdown',e=>{const w=e.target.closest&&e.target.closest('.vw');if(!w||!sheet)return;const i=w.querySelector('.vi');dg={i,x:e.clientX,y:e.clientY,a:sheet.ang||0,r:sheet.rx||0,c:null,cx:0,p:w.classList.contains('p3')||w.classList.contains('p4')};i.classList.add('dr');try{w.setPointerCapture(e.pointerId)}catch(_){}});
+document.addEventListener('pointermove',e=>{if(!dg)return;dg.c=dg.a+(e.clientX-dg.x)*.9;dg.cx=dg.p?Math.max(-75,Math.min(75,dg.r-(e.clientY-dg.y)*.6)):0;dg.i.style.transform='rotateX('+dg.cx+'deg) rotateY('+dg.c+'deg)'});
+const dgEnd=()=>{if(!dg)return;const g=dg;dg=null;g.i.classList.remove('dr');if(g.p){if(g.c!=null){sheet.ang=g.c;sheet.rx=g.cx;sheet.from=null}}else if(g.c!=null&&Math.abs(g.c-g.a)>3){sheet.from=g.c;sheet.ang=Math.round(g.c/180)*180;render()}else g.i.style.transform='rotateY('+g.a+'deg)'};
+document.addEventListener('pointerup',dgEnd);document.addEventListener('pointercancel',dgEnd);
+/* ===== Интерактивный ремонт телефона: винты → крышка → замена деталей ===== */
+const RPM={'Разбитый экран':['disp','Дисплей'],'Слабая батарея':['bat','Батарея'],'Не включается':['pmic','Плата питания'],'Проблема с платой':['mb','Материнская плата'],'Разбита задняя крышка':['cov','Задняя крышка'],'Залипает кнопка':['btn','Шлейф кнопок'],'Перегрев':['cool','Система охлаждения'],'Царапины корпуса':['cov','Задняя крышка'],'Разбито стекло камеры':['cam','Стекло камеры'],'Сломана камера':['cam','Модуль камеры']};
+const failP=(d,x)=>Math.min(.65,Math.max(.04,.13+x.c/base(d)*.6-(lvl()-1)*.015-wsL('orig')*.025));
+function doRep(d,j){const x=d&&d.defs[j];if(!x||x.fx||x.fake||d.broke)return 0;if(lose(partCost(x)))return 0;d.offer=0;
+  if(Math.random()<failP(d,x)){if(Math.random()<critP()){d.broke=1;toast('💥 Критическая неудача: устройство сломано');return 3}toast('❌ Не получилось, деньги потрачены');return 2}
+  x.fx=1;S.fixed++;toast('✅ Починено · '+gain(repXp()));return 1}
+const rpBtn=(d,kn)=>(kd(d.key)==='p'||hasView(d.key))&&kn&&!d.broke&&!d.sale&&d.defs.some(x=>!x.fake&&!x.fx)?`<button class="b" data-a="rpopen" data-i="${d.id}" style="width:100%;margin:8px 0">🔧 ${isR(d)?'Вскрыть деталь':{p:'Открыть телефон',l:'Открыть ноутбук',d:'Открыть ПК',t:'Вскрыть приставку'}[kd(d.key)]} и чинить</button>`:'';
+let RP=null,RPD=null,RPT=0;
+const RPI={cam:'📷',mb:'🧠',pmic:'⚡',cool:'❄️',bat:'🔋',btn:'🔘',disp:'📱',cov:'🧩'};
+function rpOpen(id){const d=S.inv.find(x=>x.id===id);if(!d||RP||RF||RA)return;RP={d,pop:0,open:0,cl:0,sel:'',an:'',res:0,fx:'',msg:'',sc:[],rx:-32,ry:-24};
+  const el=document.createElement('div');el.id='rp';document.body.appendChild(el);el.addEventListener('click',rpC);rpR()}
+function rpX(){if(RPD){RPD.g.remove();RPD=null}if(!RP)return;const e=$('#rp');if(e)e.remove();RP=null;render()}
+function rpSvg(R){const d=R.d,of=k=>d.defs.filter(x=>RPM[x.n]&&RPM[x.n][0]===k),bad=k=>of(k).some(x=>!x.fx),fix=k=>of(k).length&&!bad(k);
+  const B={cam:'#0e1119',mb:'#0e3a2d',pmic:'#162235',cool:'#3a2a1c',bat:'#1a2230',btn:'#3a2a14',disp:'#132033'},
+  chip=(x,y,w,h)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="#1b202b" stroke="#465068"/>`,
+  D={cam:'<circle cx="54" cy="50" r="21" fill="#05070b" stroke="#8a91a3" stroke-width="3"/><circle cx="54" cy="50" r="14" fill="#13203f"/><circle cx="54" cy="50" r="7" fill="#2c4f94"/><circle cx="48" cy="44" r="3" fill="#fff" fill-opacity=".6"/><circle cx="76" cy="30" r="3.5" fill="#f4e6a0"/>',
+  mb:'<path d="M100 78h20V66h14M138 30v12h30" stroke="#2fb384" stroke-opacity=".6" fill="none"/>'+chip(104,30,30,26)+chip(141,30,28,16)+chip(141,52,12,12)+chip(104,62,20,12)+[0,1,2,3].map(i=>`<circle cx="${132+i*9}" cy="72" r="2" fill="#d6b24a"/>`).join(''),
+  pmic:chip(106,100,30,26)+'<rect x="144" y="100" width="26" height="8" rx="2" fill="#222836"/><rect x="144" y="112" width="26" height="8" rx="2" fill="#222836"/>',
+  cool:[0,1,2,3,4,5].map(i=>`<rect x="${28+i*10}" y="102" width="5" height="22" rx="2" fill="#d98e4f"/>`).join(''),
+  bat:'<rect x="30" y="156" width="140" height="124" rx="10" fill="#27314a" stroke="#3a4766"/><path d="M104 168l-12 20h9l-5 16 14-22h-9z" fill="#ffd24a"/><text x="100" y="236" text-anchor="middle" font-size="13" font-weight="700" fill="#9fb2dd" font-family="system-ui,sans-serif">Li-Ion</text><text x="100" y="252" text-anchor="middle" font-size="10" fill="#7f90b8" font-family="system-ui,sans-serif">4500 mAh</text><rect x="60" y="283" width="80" height="6" rx="3" fill="#e8873a"/>',
+  btn:'<rect x="26" y="315" width="148" height="12" rx="3" fill="#c98a2e" fill-opacity=".5"/><path d="M30 321h140" stroke="#f0c46a" stroke-dasharray="6 3"/>',
+  disp:'<rect x="30" y="352" width="60" height="9" rx="2" fill="#c9a24a"/><rect x="96" y="352" width="76" height="9" rx="2" fill="#1d2c47"/><path d="M30 371h140M30 378h140" stroke="#2c4470"/>'};
+  const part=(k,x,y,w,h,t)=>{const bd=bad(k),an=R.an===k;
+    return`<g data-p="${k}" class="rpp${bd?' bad':''}${fix(k)?' good':''}${R.sel===k?' sel':''}${an&&R.res===1?' swap':''}${an&&R.res===2?' shake':''}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="${B[k]}" stroke="#2f3a52" stroke-width="1.5"/>${D[k]}<text x="${x+6}" y="${y+h-5}" class="lb">${t}</text><rect class="bdov" x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="#ff2d2d" fill-opacity=".28" stroke="#ff4d4d" stroke-width="2"/><path class="bdov" d="M${x+8} ${y+6}l${w/3} ${h/2}l${w/5} ${-h/4}l${w/3} ${h/2}" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="2"/><rect class="gd" x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="none" stroke="#7dff9b" stroke-width="2"/><circle class="gd" cx="${x+w-9}" cy="${y+9}" r="7" fill="#16a05a"/><path class="gd" d="M${x+w-12} ${y+9}l2.5 2.5 4.5-5" stroke="#fff" fill="none" stroke-width="1.8"/><rect class="tg" x="${x-3}" y="${y-3}" width="${w+6}" height="${h+6}" rx="12"/></g>`};
+  return`<svg viewBox="0 0 200 410"><defs><linearGradient id="rpmg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c9cfdc"/><stop offset=".5" stop-color="#5a6175"/><stop offset="1" stop-color="#aab0c0"/></linearGradient></defs><rect x="5" y="96" width="6" height="30" rx="2" fill="#4a5266"/><rect x="5" y="136" width="6" height="46" rx="2" fill="#4a5266"/><rect x="189" y="128" width="6" height="64" rx="2" fill="#4a5266"/><rect x="10" y="8" width="180" height="394" rx="34" fill="#0b0e15" stroke="url(#rpmg)" stroke-width="3.5"/><rect x="17" y="15" width="166" height="380" rx="28" fill="#10151f" stroke="#1d2536"/>${part('cam',22,22,64,64,'Камера')}${part('mb',96,22,82,62,'Плата')}${part('pmic',96,92,82,44,'Питание')}${part('cool',22,96,64,40,'Охлажд.')}${part('bat',22,148,156,150,'Батарея')}${part('btn',22,310,156,26,'Шлейф кнопок')}${part('disp',22,346,156,48,'Дисплей (шлейф)')}</svg>`}
+function rpR(){const R=RP,el=$('#rp');if(!R||!el)return;if(kd(R.d.key)!=='p'||isR(R.d))return rdR();const d=R.d,of=k=>d.defs.filter(x=>RPM[x.n]&&RPM[x.n][0]===k),bad=k=>of(k).some(x=>!x.fx);
+  const left=d.defs.filter(x=>RPM[x.n]&&!x.fx).length,st=!R.open?1:left?2:3,fx=R.fx;R.fx='';
+  const steps=['Снять крышку','Заменить детали','Собрать'].map((t,i)=>`<span class="${st===i+1?'on':st>i+1?'dn':''}">${i+1}. ${t}</span>`).join('');
+  let main,pn='',act='';
+  if(!R.open){main=`<div class="rpmain c"><div class="rpstage">${R.pop?`<div class="rpint u">${rpSvg(R)}</div>`:''}<div class="rplid ${R.pop?'lift':'glow'}">${face(d,1,1,null)}</div></div></div>`;
+    act=R.pop?'':`<div class="rpm">Крышка держится на защёлках — поддень её и сними</div><button class="rpb" data-q="pop">🪝 Поддеть и снять заднюю крышку</button>`}
+  else if(R.cl)main=`<div class="rpmain c"><div class="rpstage"><div class="rpint u">${rpSvg(R)}</div><div class="rplid land">${face(d,1,1,null)}</div></div></div>`;
+  else{const cb=bad('cov');
+    const chips=d.broke?'':d.defs.map((x,j)=>RPM[x.n]&&!x.fx&&!x.fake?`<div class="rpt" data-j="${j}" data-k="${RPM[x.n][0]}"><i>${RPI[RPM[x.n][0]]}</i><span><b>${RPM[x.n][1]}</b><small>${x.n} · риск ${Math.round(failP(d,x)*100)}%</small></span><em>${f(partCost(x))}</em></div>`:'').join('');
+    main=`<div class="rpmain"><div class="rpstage"><div class="rpint${fx==='open'?' in':''}">${rpSvg(R)}</div></div><div class="rpside"><div class="rpcov ${cb?'bad':'good'}" data-p="cov"><div class="rpcf">${face(d,1,1,null)}</div><span><b>Задняя крышка</b><small>снята · ${cb?'повреждена, замени':'в порядке ✔'}</small></span></div><div class="rpth">🧰 Новые детали<small>перетащи на сломанную деталь</small></div><div class="rptray">${chips||'<div class="rpe">Заменять больше нечего ✔</div>'}</div></div></div>`;
+    const k=R.sel,x=k?of(k).find(y=>!y.fx):null;
+    pn=d.broke?'<div class="rpn">💥 Устройство сломано. Годится только на запчасти.</div>':R.msg?`<div class="rpn">${R.msg}</div>`:x?`<div class="rpn"><b>${RPM[x.n][1]}</b> · ${x.n}<br>Новая деталь ${f(partCost(x))} · риск неудачи ~${Math.round(failP(d,x)*100)}%. Перетащи её из лотка на эту деталь.</div>`:`<div class="rpn rpm">${left?'Красным мигают сломанные детали. Перетащи подходящую новую деталь прямо на неё':'Все детали заменены — можно собирать'}</div>`;
+    act=`<button class="rpb ${left?'g':'ok'}" data-q="done">${left?'Закрыть крышку и выйти':'✅ Собрать телефон'}</button>`}
+  el.innerHTML=`<div class="rph"><span>🔧 ${esc(nm(d))}</span><button data-q="x">✕</button></div><div class="rpsteps">${steps}</div><div class="rpm">Баланс: ${f(S.bal)}${R.open?' · сломано деталей: '+left:''}</div>${main}${pn}${act}`}
+function rpC(e){const R=RP;if(!R||R.cl||Date.now()<RPT)return;const p=e.target.closest('[data-p]'),t=e.target.closest('[data-q]');
+  if(p&&R.open){R.sel=p.dataset.p;R.msg='';rpR();return}if(!t)return;const q=t.dataset.q;
+  if(q==='x')rpX();
+  else if(q==='scr'){const n=+t.dataset.n;if(R.sc[n])return;R.sc[n]=1;t.classList.add('out');setTimeout(()=>{if(RP===R)rpR()},420)}
+  else if(q==='pop'){if(kd(R.d.key)!=='p'||isR(R.d)){R.rx=0;R.ry=RDK(R.d).ty==='door'?-12:0}R.pop=1;rpR();setTimeout(()=>{if(RP===R){R.open=1;R.fx='open';rpR()}},750)}
+  else if(q==='done'){if(!R.open)return rpX();R.cl=1;rpR();setTimeout(()=>{if(RP===R){const ok=!rpLeft(R.d);rpX();toast(ok?(kd(R.d.key)==='p'&&!isR(R.d)?'📱 Телефон собран':'🔧 Устройство собрано'):'🔧 Корпус закрыт')}},700)}}
+const rpUnder=e=>{const u=document.elementFromPoint(e.clientX,e.clientY);return u&&u.closest?u.closest('#rp [data-p]'):null};
+document.addEventListener('pointerdown',e=>{const t=RP&&!RP.cl&&e.target.closest&&e.target.closest('.rpt');if(!t||RPD)return;e.preventDefault();
+  const g=t.cloneNode(true);g.classList.add('rpg');g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';document.body.appendChild(g);t.classList.add('lift');
+  RPD={g,t,k:t.dataset.k,j:+t.dataset.j,h:null};
+  document.querySelectorAll('#rp .rpp.bad[data-p="'+RPD.k+'"],#rp .rpcov.bad[data-p="'+RPD.k+'"]').forEach(n=>n.classList.add('tgt'))});
+document.addEventListener('pointermove',e=>{if(!RPD)return;RPD.g.style.left=e.clientX+'px';RPD.g.style.top=e.clientY+'px';const h=rpUnder(e);
+  if(h!==RPD.h){if(RPD.h)RPD.h.classList.remove('hov');RPD.h=h;if(h&&h.dataset.p===RPD.k)h.classList.add('hov')}});
+const rpDEnd=(e,c)=>{const D=RPD;if(!D)return;RPD=null;RPT=Date.now()+250;D.g.remove();D.t.classList.remove('lift');
+  document.querySelectorAll('#rp .tgt,#rp .hov').forEach(n=>n.classList.remove('tgt','hov'));
+  const R=RP;if(!R||c)return;const h=rpUnder(e);if(!h)return;
+  if(h.dataset.p!==D.k){R.msg='❌ Эта деталь сюда не подходит — ищи место, подсвеченное жёлтым';R.sel='';R.an=h.dataset.p;R.res=2;rpR();setTimeout(()=>{R.an=''},600);return}
+  const r=doRep(R.d,D.j);if(!r)return;R.res=r;R.an=D.k;R.msg='';R.sel='';save();render(1);rpR();setTimeout(()=>{R.an=''},900)};
+document.addEventListener('pointerup',e=>rpDEnd(e));document.addEventListener('pointercancel',e=>rpDEnd(e,1));
+
+/* ===== 🔧 Ремонт ноутбуков, ПК и приставок: винты → крышка → замена деталей (3D) ===== */
+const RDI={cam:'📷',mb:'🧠',pmic:'⚡',cool:'❄️',bat:'🔋',btn:'🔘',disp:'🖥',cov:'🧩',hdmi:'🔌',wifi:'📶',rem:'🎮'};
+const RDN={rem:'Пульт',mb:'Плата',pmic:'Питание',cool:'Охлажд.',bat:'Батарея',btn:'Кнопки',disp:'Шлейф матрицы',hdmi:'HDMI',wifi:'Wi‑Fi'};
+const RDL={l:{disp:[4,4,92,13],cool:[5,21,27,38],mb:[35,21,34,38],pmic:[72,21,23,38],bat:[5,63,64,33],btn:[72,63,23,33]},
+ d:{mb:[6,4,64,48],cool:[73,4,21,26],btn:[73,34,21,13],pmic:[6,80,88,16]},
+ s:{mb:[5,10,45,80],pmic:[54,10,41,26],cool:[54,40,41,22],btn:[54,66,41,24]},
+ t:{mb:[5,10,40,50],rem:[5,64,40,26],pmic:[49,10,46,26],cool:[49,40,46,22],hdmi:[49,66,21,24],wifi:[74,66,21,24]}};
+const RDS={l:[[8,12],[50,9],[92,12],[8,88],[50,91],[92,88]],d:[[12,7],[88,7],[12,93],[88,93]],s:[[8,14],[92,14],[8,86],[92,86]],t:[[8,16],[92,16],[8,84],[92,84]]};
+/* --- комплектующие: ЦП, видеокарта, плата, память, SSD, блок питания, корпус --- */
+const isR=d=>I[d.key][2]==='r';
+const RDRK={'Перегрев':'cool','Артефакты / ошибки':'chip','Повреждён разъём':'conn','Нестабильная работа':'vrm'};
+const RDRL={cpu:{cool:'Термопаста',chip:'Кристалл (ядра)',conn:'Контактные площадки',vrm:'Кэш и контроллер'},
+ gpu:{cool:'Система охлаждения',chip:'Графический чип',conn:'Разъём PCIe',vrm:'Питание VRM'},
+ mb:{cool:'Радиатор VRM',chip:'Чипсет',conn:'Разъёмы питания',vrm:'Цепи питания'},
+ ram:{cool:'Радиатор',chip:'Чипы памяти',conn:'Контакты планки',vrm:'PMIC (питание)'},
+ ssd:{cool:'Радиатор',chip:'Чипы NAND',conn:'Разъём M.2',vrm:'Контроллер'},
+ psu:{cool:'Вентилятор БП',chip:'Конденсаторы',conn:'Кабельные разъёмы',vrm:'Трансформатор'},
+ case:{cool:'Вентиляторы',chip:'ARGB-подсветка',conn:'Передняя панель',vrm:'Хаб питания'}};
+Object.assign(RDI,{chip:'🔲',conn:'🔌',vrm:'⚡'});
+Object.assign(RDL,{rcpu:{cool:[4,4,92,18],chip:[28,26,44,48],conn:[4,26,20,48],vrm:[76,26,20,48]},
+ rgpu:{cool:[3,6,50,88],chip:[56,6,22,50],vrm:[80,6,17,50],conn:[56,62,41,32]},
+ rmb:{chip:[34,30,32,32],cool:[4,4,92,20],conn:[4,66,50,30],vrm:[58,66,38,30]},
+ rram:{cool:[3,8,24,84],chip:[29,8,42,84],vrm:[73,8,12,84],conn:[87,8,10,84]},
+ rssd:{chip:[3,8,36,84],cool:[41,8,18,84],vrm:[61,8,20,84],conn:[83,8,14,84]},
+ rpsu:{cool:[4,4,40,60],vrm:[48,4,48,60],chip:[4,68,40,28],conn:[48,68,48,28]},
+ rcase:{cool:[6,4,60,30],chip:[6,38,60,22],conn:[70,4,24,56],vrm:[6,64,88,30]}});
+const FAN='#06070a 0 58%,#7b8296 60% 68%,transparent 70%';
+const RCV={cpu:['linear-gradient(135deg,#e3e6ee,#8b93a6)','CPU','rgba(0,0,0,.5)'],
+ gpu:[`radial-gradient(circle 46px at 25% 50%,${FAN}),radial-gradient(circle 46px at 75% 50%,${FAN}),linear-gradient(135deg,#2a2e3a,#0f1116)`,'','#fff'],
+ mb:['repeating-linear-gradient(90deg,#4a5062 0 6px,#383d4c 6px 12px)','MOTHERBOARD','#fff'],
+ ram:['linear-gradient(180deg,#ff2bd6 0 7%,#18e0ff 7% 10%,#2b2f3a 10%)','DDR5','#fff'],
+ ssd:['linear-gradient(135deg,#1c1f27,#0d0f14)','NVMe SSD','#7dd3fc'],
+ psu:[`radial-gradient(circle 52px at 30% 50%,${FAN}),repeating-linear-gradient(0deg,#444a58 0 3px,#2a2e38 3px 6px)`,'','#fff'],
+ case:['linear-gradient(135deg,rgba(120,160,255,.35),rgba(255,60,200,.25)),#10141c','GAMING','#fff']};
+function rcv(sl,d){const c=RCV[sl];return`<div style="position:absolute;inset:0;background:${c[0]};display:flex;flex-direction:column;align-items:center;justify-content:${sl==='psu'?'flex-end':'center'};padding:8px;text-align:center;font:800 ${sl==='cpu'?26:16}px system-ui,sans-serif;letter-spacing:2px;color:${c[2]}">${sl==='ram'?(nm(d).match(/DDR\d/)||['RAM'])[0]:c[1]}<small style="font:600 10px system-ui;letter-spacing:0;opacity:.8;margin-top:4px">${esc(nm(d).replace(/^\S+\s/,''))}</small></div>`}
+const RDP={cpu:{L:'rcpu',ty:'lift',W:200,H:200,D:14,wc:'#9aa1b2',ln:'Снять крышку процессора (IHS)'},
+ gpu:{L:'rgpu',ty:'lift',W:292,H:120,D:34,wc:'#1a1d26',ln:'Снять кожух кулера'},
+ mb:{L:'rmb',ty:'lift',W:240,H:240,D:12,wc:'#2b2f3a',ln:'Снять защитную крышку'},
+ ram:{L:'rram',ty:'lift',W:300,H:70,D:14,wc:'#2b2f3a',ln:'Снять радиатор планки'},
+ ssd:{L:'rssd',ty:'lift',W:280,H:80,D:14,wc:'#1c1f27',ln:'Снять крышку накопителя'},
+ psu:{L:'rpsu',ty:'hood',W:220,H:140,D:110,wc:'#444a58',ln:'Поднять крышку блока питания'},
+ case:{L:'rcase',ty:'door',W:136,H:220,D:120,wc:'#1f232c',ln:'Открыть боковую панель'}};
+Object.keys(RDP).forEach(k=>{RDP[k].rl=RDRL[k];RDP[k].cv=d=>rcv(k,d)});
+function RDK(d){if(isR(d))return RDP[I[d.key][4]];const k=kd(d.key),n=nm(d);
+  return k==='l'?{L:'l',ty:'lift',W:292,H:190,D:16,sd:1,ox:14,oy:24,ln:'Снять нижнюю панель',wc:'#8d94a6'}
+   :k==='t'?{L:'t',ty:'hood',W:200,H:100,D:40,sd:0,ox:60,oy:70,ln:'Поднять верхнюю крышку',wc:'#2b2f3a'}
+   :/Mac|сервер/.test(n)?{L:'s',ty:'lift',W:220,H:130,D:50,sd:0,ox:50,oy:50,ln:'Снять верхнюю крышку',wc:'#a9b0c0'}
+   :{L:'d',ty:'door',W:136,H:220,D:120,sd:0,ox:92,oy:10,ln:'Открыть боковую панель',wc:'#1f232c'}}
+function RDM(d,x){if(x.fake)return 0;if(isR(d)){const r=RDRK[x.n];return r?[r,RDRL[I[d.key][4]][r]]:0}const n=x.n,k=kd(d.key),l=k==='l',c=k==='d',L=RDL[RDK(d).L];let r=null;
+  if(/плат/.test(n))r=['mb','Материнская плата'];
+  else if(/Не включается/.test(n))r=['pmic',c?'Блок питания':'Плата питания'];
+  else if(/Перегрев/.test(n))r=['cool',l?'Кулер':'Система охлаждения'];
+  else if(/Царапины|задняя крышка|стекло корпуса/.test(n))r=['cov',/стекло/.test(n)?'Стеклянная панель':'Панель корпуса'];
+  else if(/кнопка/.test(n))r=['btn',l?'Клавиатура':'Кнопка питания'];
+  else if(/батаре/.test(n))r=['bat','Аккумулятор'];
+  else if(/Разбитый экран/.test(n))r=['disp','Матрица'];
+  else if(/HDMI/.test(n))r=['hdmi','Порт HDMI'];
+  else if(/Wi/.test(n))r=['wifi','Wi‑Fi модуль'];
+  else if(/пульта/.test(n))r=['rem','Модуль пульта (Bluetooth)'];
+  return r&&(r[0]==='cov'||L[r[0]])?r:0}
+const rpLeft=d=>kd(d.key)==='p'&&!isR(d)?d.defs.filter(x=>RPM[x.n]&&!x.fx).length:d.defs.filter(x=>RDM(d,x)&&!x.fx).length;
+function rdR(){const R=RP,el=$('#rp');if(!R||!el)return;const d=R.d,K=RDK(d),lay=RDL[K.L],SC=RDS[K.L],m=x=>RDM(d,x),of=k=>d.defs.filter(x=>m(x)&&m(x)[0]===k),bad=k=>of(k).some(x=>!x.fx),
+  left=rpLeft(d),ns=R.sc.filter(Boolean).length,all=1,open=R.open,st=!open?1:left?2:3;R.fx='';
+  const steps=['Снять крышку','Заменить детали','Собрать'].map((t,i)=>`<span class="${st===i+1?'on':st>i+1?'dn':''}">${i+1}. ${t}</span>`).join('');
+  const {W,H,D,wc}=K,wl=s=>`<div class="rdw" style="background-color:${wc};${s}"></div>`,
+  walls=wl(`left:0;top:0;width:${W}px;height:${H}px;transform:translateZ(${-D/2}px)`)
+   +wl(`left:${(W-D)/2}px;top:0;width:${D}px;height:${H}px;transform:rotateY(-90deg) translateZ(${W/2}px)`)
+   +wl(`left:${(W-D)/2}px;top:0;width:${D}px;height:${H}px;transform:rotateY(90deg) translateZ(${W/2}px)`)
+   +wl(`left:0;top:${(H-D)/2}px;width:${W}px;height:${D}px;transform:rotateX(90deg) translateZ(${H/2}px)`)
+   +wl(`left:0;top:${(H-D)/2}px;width:${W}px;height:${D}px;transform:rotateX(-90deg) translateZ(${H/2}px)`),
+  parts=Object.entries(lay).map(([k,[x,y,w,h]])=>{const b=bad(k),an=R.an===k;
+   return`<div data-p="${k}" class="rpp rdp${b?' bad':''}${of(k).length&&!b?' good':''}${R.sel===k?' sel':''}${an&&R.res===1?' swap':''}${an&&R.res===2?' shake':''}" style="left:${x}%;top:${y}%;width:${w}%;height:${h}%"><i>${RDI[k]}</i><b>${K.rl?K.rl[k]:RDN[k]}</b></div>`}).join('')
+   +(K.L==='d'?'<div class="rdp rdx" style="left:6%;top:56%;width:64%;height:20%"><i>🎮</i><b>Видеокарта</b></div>':''),
+  cs=R.cl?' land':open?' off':R.pop?' pop':'',
+  cv=`<div class="rdcv${cs}" style="--z:${D/2}px;background:${wc}">${K.cv?K.cv(d):`<div class="rdsv" style="left:${-K.ox}px;top:${-K.oy}px">${face(d,K.sd,1,null)}</div>`}</div>`,
+  model=`<div class="rd3 k-${K.ty}${open?' o':''}"><div class="rdm" style="width:${W}px;height:${H}px;transform:rotateX(${R.rx}deg) rotateY(${R.ry}deg)">${walls}<div class="rdbed" style="transform:translateZ(${D/2-6}px)">${parts}</div>${cv}</div></div>`;
+  const cx=of('cov'),cb=cx.some(x=>!x.fx),covc=open&&cx.length?`<div class="rpcov ${cb?'bad':'good'}" data-p="cov"><div class="rpcf" style="font-size:26px;text-align:center">🧩</div><span><b>${m(cx[0])[1]}</b><small>${cb?'повреждена, замени':'в порядке ✔'}</small></span></div>`:'';
+  const chips=d.broke?'':d.defs.map((x,j)=>{const r=m(x);return r&&!x.fx?`<div class="rpt" data-j="${j}" data-k="${r[0]}"><i>${RDI[r[0]]}</i><span><b>${r[1]}</b><small>${x.n} · риск ${Math.round(failP(d,x)*100)}%</small></span><em>${f(partCost(x))}</em></div>`:''}).join('');
+  const k=R.sel,x=k&&open?of(k).find(y=>!y.fx):null;let pn,act='';
+  if(!all)pn=`<div class="rpn rpm">🪛 Выкрути все винты: тапай по ним (${ns}/${SC.length}). Модель можно вращать пальцем.</div>`;
+  else if(!open){pn=`<div class="rpn rpm">${R.pop?'Снимаем…':'Крышка держится на защёлках — поддень её и сними. Модель можно вращать пальцем.'}</div>`;act=R.pop?'':`<button class="rpb" data-q="pop">🪝 ${K.ln}</button>`}
+  else{pn=d.broke?'<div class="rpn">💥 Устройство сломано. Годится только на запчасти.</div>':R.msg?`<div class="rpn">${R.msg}</div>`:x?`<div class="rpn"><b>${m(x)[1]}</b> · ${x.n}<br>Новая деталь ${f(partCost(x))} · риск неудачи ~${Math.round(failP(d,x)*100)}%. Перетащи её из лотка на эту деталь.</div>`:`<div class="rpn rpm">${left?'Красным мигают сломанные детали. Перетащи подходящую новую деталь прямо на неё':'Все детали заменены — можно собирать'}</div>`;
+    act=R.cl?'':`<button class="rpb ${left?'g':'ok'}" data-q="done">${left?'Закрыть и выйти':'✅ Собрать устройство'}</button>`}
+  el.innerHTML=`<div class="rph"><span>🔧 ${esc(nm(d))}</span><button data-q="x">✕</button></div><div class="rpsteps">${steps}</div><div class="rpm">Баланс: ${f(S.bal)}${open?' · сломано деталей: '+left:''}</div>${model}`
+   +(open?covc+`<div class="rpth">🧰 Новые детали<small>перетащи на сломанную деталь</small></div><div class="rptray">${chips||'<div class="rpe">Заменять больше нечего ✔</div>'}</div>`:'')+pn+act}
+let RDG=null;
+document.addEventListener('pointerdown',e=>{const t=e.target.closest&&e.target.closest('.rd3');if(!t||!RP||RP.open||RP.pop||RP.cl||RDG)return;RDG={x:e.clientX,y:e.clientY,rx:RP.rx,ry:RP.ry,m:0,el:t.querySelector('.rdm')}});
+document.addEventListener('pointermove',e=>{const g=RDG;if(!g||!RP)return;const dx=e.clientX-g.x,dy=e.clientY-g.y;if(Math.abs(dx)+Math.abs(dy)>6)g.m=1;if(!g.m)return;RP.ry=Math.max(-85,Math.min(85,g.ry+dx*.6));RP.rx=Math.max(-80,Math.min(80,g.rx-dy*.5));g.el.style.transform='rotateX('+RP.rx+'deg) rotateY('+RP.ry+'deg)'});
+const rdEnd=()=>{if(RDG&&RDG.m)RPT=Date.now()+250;RDG=null};
+document.addEventListener('pointerup',rdEnd);document.addEventListener('pointercancel',rdEnd);
+
+/* ===== Перепрошивка iPhone (DFU → прошивка → прошивка → активация) ===== */
+let RF=null;
+const RFNET=['Masterskaya_5G_Guest','Masterskaya_5G','Masterskaya-5G','TP-LINK_BA34'];
+const RFLOG=['Sending iBSS (1401 KB)… done','Sending iBEC (1331 KB)… done','Sending RestoreRamdisk… done','Sending KernelCache… done','Waiting for device to enter restore mode…','Partition NAND device (1)','Uploading filesystem…','Verifying restore (6438 MB)…','Flashing SEP firmware… done','Updating baseband… done'];
+function rfId(d){const n=nm(d),m={'iPhone 8':'10,1','iPhone X':'10,6','iPhone XR':'11,8','iPhone XS':'11,2','iPhone XS Max':'11,6','iPhone SE':'12,8','iPhone 11':'12,1','iPhone 11 Pro':'12,3','iPhone 11 Pro Max':'12,5','iPhone 12':'13,2','iPhone 12 mini':'13,1','iPhone 12 Pro':'13,3','iPhone 12 Pro Max':'13,4','iPhone 13':'14,5','iPhone 13 mini':'14,4','iPhone 13 Pro':'14,2','iPhone 13 Pro Max':'14,3','iPhone 14 Pro':'15,2','iPhone 14 Pro Max':'15,3','iPhone 14':'14,7','iPhone 14 Plus':'14,8','iPhone 15':'15,4','iPhone 15 Plus':'15,5','iPhone 15 Pro':'16,1','iPhone 15 Pro Max':'16,2','iPhone 16':'17,3','iPhone 16 Pro':'17,1','iPhone 16 Pro Max':'17,2'};
+  for(const k of Object.keys(m).sort((a,b)=>b.length-a.length))if(n.includes(k))return'iPhone'+m[k];
+  const h=hs(n);return'iPhone'+(16+h%4)+','+(1+h%5)}
+function rfOpen(id){
+  const d=S.inv.find(x=>x.id===id);if(!d||!d.lock||RF||RA)return;
+  if(!S.own)return toast('Сначала купите ПК');if(busy())return toast('ПК занят другой задачей');
+  const i1=rfId(d),m=i1.match(/iPhone(\d+),(\d+)/),M=+m[1],N=m[2],sv=['16.7','17.6','18.3'][hs(nm(d))%3],[a,b]=sv.split('.').map(Number);
+  const F=[{n:`${i1}_${a}.${b+1}_beta2_Restore.ipsw`,t:'бета ⚠',k:'beta'},{n:`iPhone${M-1},${N}_${sv}_Restore.ipsw`,t:'подписана',k:'wrong'},{n:`${i1}_${sv}_Restore.ipsw`,t:'подписана',k:'ok'},{n:`${i1}_${a-1}.7_Restore.ipsw`,t:'не подписана',k:'old'}].sort(()=>Math.random()-.5);
+  RF={d,i1,sv,F,iv:0};rfReset();
+  const el=document.createElement('div');el.id='rf';document.body.appendChild(el);
+  el.addEventListener('click',rfC);el.addEventListener('input',e=>{if(e.target.id==='rfin')RF.in=e.target.value});
+  RF.iv=setInterval(rfT,100);rfR()}
+function rfReset(){const R=RF;Object.assign(R,{st:1,p:0,v:0,ph:'idle',t:0,msg:'',fp:0,n:0,cab:1,ev:0,bc:0,fail:'',net:'',in:'',ok:0,done:0,fw:null,pw:String(1e7+Math.floor(Math.random()*9e7)),log:['$ idevice connect','Подключено: '+R.i1+', iOS '+R.sv]})}
+function rfDone(R){if(R.done)return;const d=R.d;d.lock=0;d.offer=0;S.ulr='✅ '+nm(d)+': разблокирован, цена выросла';R.done=1;toast('🔓 Разблокирован: '+nm(d)+' · '+gain(15));save();rfR()}
+function rfX(){if(!RF)return;clearInterval(RF.iv);const e=$('#rf');if(e)e.remove();RF=null;render()}
+const rfMsg=R=>R.ok?'✔ Режим DFU включён':R.msg||({idle:'Нажми обе кнопки',both:'Держи обе кнопки…',rel:'Отпусти ПИТАНИЕ! Громкость – держи',hold:'Держи ГРОМКОСТЬ…'})[R.ph];
+function rfPh(R){const s3=R.st===3,g='#7dff9b',c=x=>x?g:'#8890a8',cut=s3&&!R.cab;
+  return`<svg viewBox="0 0 200 270" class="rfp"><rect x="52" y="8" width="96" height="226" rx="16" fill="#0d1224" stroke="#8890a8" stroke-width="5"/><rect x="58" y="14" width="84" height="214" rx="11" fill="${s3?'#000':'#1b2547'}"/>`+
+  (s3?`<ellipse cx="100" cy="108" rx="11" ry="14" fill="#ddd"/><rect x="72" y="140" width="56" height="4" rx="2" fill="#333"/><rect x="72" y="140" width="${56*R.fp}" height="4" rx="2" fill="#eee"/>`:`<rect x="86" y="20" width="28" height="7" rx="3.5" fill="#000"/>`)+
+  `<rect x="46" y="62" width="6" height="16" rx="2" fill="#8890a8"/><rect x="46" y="86" width="6" height="26" rx="2" fill="#8890a8"/><rect x="46" y="118" width="6" height="26" rx="2" fill="${c(R.v&&!s3)}"/><rect x="148" y="90" width="6" height="40" rx="2" fill="${c(R.p&&!s3)}"/><path d="M100 234V258H60" stroke="${cut?'#ff5a5a':'#8890a8'}" stroke-width="3" fill="none" ${cut?'stroke-dasharray="4 9"':''}/></svg>`}
+function rfR(){const R=RF,el=$('#rf');if(!R||!el)return;
+  const T=['','режим DFU','выбор прошивки','прошивка','активация'][R.st],
+  H=['','Зажми <b>ПИТАНИЕ</b> и <b>ГРОМКОСТЬ –</b> вместе на 4 секунды. Потом отпусти ПИТАНИЕ, а ГРОМКОСТЬ – держи ещё 3 секунды.',`Найди файл прошивки именно для <b>${R.i1}</b>, который подписан Apple.`,'Идёт запись. Если кабель отойдёт — быстро нажми «Переподключить».','Подключись к сети с наклейки: выбери то же название и введи пароль.'][R.st];
+  let b='';
+  if(R.st===1)b=rfPh(R)+`<div class="rfbar"><i id="rfb"></i></div><div class="rfm" id="rfm">${rfMsg(R)}</div><div class="rfbt"><button data-r="p" class="${R.p?'on':''}">⏻ Питание</button><button data-r="v" class="${R.v?'on':''}">Громкость –</button></div><div class="rfs">Кнопки нажимаются тапом и залипают</div>`;
+  else if(R.st===2)b=`<div class="rfid">${R.i1}<small>${nm(R.d)}</small></div>${R.msg?`<div class="rfe">${R.msg}</div>`:''}`+R.F.map((f,i)=>`<button class="rff" data-r="fw" data-i="${i}">📦 ${f.n}<span class="${f.k==='old'?'bad':f.k==='beta'?'wr':'ok'}">${f.t}</span></button>`).join('');
+  else if(R.st===3&&!R.done)b=`<div class="rfban">${R.i1} ${R.sv} — подписана ✅</div>`+rfPh(R)+(R.fail?`<div class="rfe">❌ ${R.fail}</div><div class="rfbt"><button data-r="again">↻ Заново</button><button data-r="x">Закрыть</button></div>`:`<div class="rfbar"><i id="rfb" style="width:${R.fp*100}%"></i></div><div class="rfm" style="${R.cab?'':'color:#ff7b7b'}">${R.cab?'Не отключай телефон…':'⚠ Кабель отошёл!'}</div>${R.cab?'':'<div class="rfbt"><button class="on" data-r="cab">🔌 Переподключить кабель</button></div>'}`);
+  else if(R.done)b=`<div class="rfid">🔓<small>${nm(R.d)} разблокирован</small></div><div class="rfm">Цена выросла. Телефон готов к продаже.</div><div class="rfbt"><button class="on" data-r="x">Готово</button></div>`;
+  else b='';
+  el.innerHTML=`<div class="rfh"><span>Перепрошивка · ${esc(nm(R.d))}</span><button data-r="x">✕</button></div><h4>Шаг ${R.st} из 3 · ${T}</h4><p>${H}</p>${b}<pre class="rfl" id="rfl">${esc(R.log.slice(-7).join('\n'))}</pre>`}
+function rfC(e){const t=e.target.closest('[data-r]');if(!t||!RF)return;const R=RF,r=t.dataset.r,i=+t.dataset.i;
+  if(r==='x')rfX();
+  else if(r==='p'||r==='v'){if(R.st===1&&!R.ok){R[r]=R[r]?0:1;rfR()}}
+  else if(r==='fw'){const f=R.F[i];
+    if(f.k==='wrong'){R.msg='Прошивка от '+f.n.split('_')[0]+'… не та 😬';R.log.push('✗ Прошивка от другой модели — восстановление прервано')}
+    else if(f.k==='old'){R.msg='Эта версия не подписана — Apple откажет (ошибка 3194)';R.log.push('✗ Прошивка не подписана')}
+    else{if(lose(300))return;R.fw=f;R.st=3;R.msg='';R.log=['Прошивка: '+f.n]}
+    rfR()}
+  else if(r==='cab'){R.cab=1;R.log.push('✔ Кабель переподключён');rfR()}
+  else if(r==='net'){R.net=RFNET[i];rfR()}
+  else if(r==='again'){const l=R.log;rfReset();rfR()}
+  else if(r==='act'){const n=R.net==='Masterskaya_5G',p=(R.in||'').replace(/\D/g,'')===R.pw;
+    if(!n||!p){R.msg=!n?'Не та сеть — выбери Masterskaya_5G 😬':'Неверный пароль — смотри стикер';R.log.push('✗ Активация не удалась');rfR();return}
+    const d=R.d;d.lock=0;d.offer=0;S.ulr='✅ '+nm(d)+': разблокирован, цена выросла';R.done=1;toast('🔓 Разблокирован: '+nm(d)+' · '+gain(15));save();rfR()}}
+function rfT(){const R=RF;if(!R)return;const n=Date.now(),B=x=>{const b=$('#rfb');if(b)b.style.width=x*100+'%'},rs=m=>{R.ph='idle';R.p=R.v=0;R.msg=m;rfR()};
+  if(R.st===1&&!R.ok){
+    if(R.ph==='idle'){if(R.p&&R.v){R.ph='both';R.t=n;R.msg='';const m=$('#rfm');if(m)m.textContent=rfMsg(R)}}
+    else if(R.ph==='both'){if(!(R.p&&R.v))rs('Рано отпустил — начни заново');else{const e=(n-R.t)/4000;B(Math.min(1,e));if(e>=1){R.ph='rel';R.t=n;B(1);const m=$('#rfm');if(m)m.textContent=rfMsg(R)}}}
+    else if(R.ph==='rel'){if(!R.v)rs('Громкость отпущена — заново');else if(!R.p){R.ph='hold';R.t=n;B(0);const m=$('#rfm');if(m)m.textContent=rfMsg(R)}else if(n-R.t>5000)rs('Слишком долго держал ПИТАНИЕ — заново')}
+    else if(R.ph==='hold'){if(!R.v)rs('Громкость отпущена — заново');else{const e=(n-R.t)/3000;B(Math.min(1,e));if(e>=1){R.ok=1;R.log.push('✔ Устройство в режиме DFU');rfR();setTimeout(()=>{if(RF===R){R.st=2;R.msg='';rfR()}},900)}}}
+  }else if(R.st===3&&!R.fail&&!R.done){
+    if(R.cab){R.fp=Math.min(1,R.fp+.1/14);B(R.fp);const k=Math.floor(R.fp*RFLOG.length);let ch=0;while(R.n<k){R.log.push(RFLOG[R.n++]);ch=1}if(ch){const l=$('#rfl');if(l)l.textContent=R.log.slice(-7).join('\n')}
+      if(R.fp>=.45&&!R.ev){R.ev=1;R.cab=0;R.et=n;R.log.push('✗ Кабель отключён!');rfR()}
+      else if(R.fw.k==='beta'&&R.fp>=.85&&!R.bc){R.bc=1;if(Math.random()<.5){R.fail='Бета-сборка не прошла проверку (ошибка 4005)';rfR()}}
+      if(R.fp>=1&&!R.fail){R.log.push('✔ Восстановление завершено');rfDone(R)}
+    }else if(n-R.et>3500+400*S.pc){R.fail='Кабель не переподключён вовремя (ошибка 4013)';rfR()}}}
+
+/* ===== Root Алисы (загрузчик → образ → запись → привязка) ===== */
+let RA=null;
+const RANET=['Alisa_Setup_Guest','Alisa_Setup_5G','Alisa-Setup-5G','TP-LINK_7C21'];
+const RALOG=['Reading partition table… done','Unlocking bootloader… done','Backup boot.img (16384 KB)… done','Writing system.img (1402 MB)…','Writing vendor.img… done','Patching init scripts… done','Installing Alice module… done','Installing voice skills… done','Verifying vbmeta…','Rebooting device… done'];
+const sc=x=>String(x/1000).replace('.',',');
+function raOpen(id){
+  const d=S.inv.find(x=>x.id===id),v=PGV[S.pv||0];
+  if(!d||RA||RF||!okP(d))return;
+  if(!S.own)return toast('Сначала купите ПК');
+  if(busy())return toast('ПК занят другой задачей');
+  if(skLv()<v[5])return toast('Нужен навык программирования: ур. '+v[5]);
+  const sel=S.pv||0,code=d.key,tag=['lite','pro','max'][sel],h=hs(nm(d)),ver=['4.2','5.1','6.0'][h%3],[a,b]=ver.split('.').map(Number);
+  const others=Object.keys(I).filter(k=>I[k][2]==='t'&&k!==code),oth=others.length?others[h%others.length]:'tvxx';
+  const F=[{n:`${code}_alice_${tag}_v${a}.${b+1}_beta.img`,t:'бета ⚠',k:'beta'},{n:`${oth}_alice_${tag}_v${ver}.img`,t:'подписан',k:'wrong'},{n:`${code}_alice_${tag}_v${ver}.img`,t:'подписан',k:'ok'},{n:`${code}_alice_${tag}_v${a-1}.9.img`,t:'не подписан',k:'old'}].sort(()=>Math.random()-.5);
+  RA={d,sel,code,ver,F,iv:0};raReset();
+  const el=document.createElement('div');el.id='rf';document.body.appendChild(el);
+  el.addEventListener('click',raC);el.addEventListener('input',e=>{if(e.target.id==='rfin')RA.in=e.target.value});
+  RA.iv=setInterval(raT,100);raR()}
+function raReset(){const R=RA;Object.assign(R,{st:1,p:0,v:0,ph:'idle',t:0,msg:'',fp:0,n:0,cab:1,ev:0,bc:0,vb:0,fail:'',brick:0,net:'',in:'',ok:0,done:0,fw:null,t1:3000+500*R.sel,t2:2000+500*R.sel,code4:String(100000+Math.floor(Math.random()*899999)),log:['$ adb devices','Подключено: '+R.code+', Alice '+R.ver]})}
+function raX(){if(!RA)return;clearInterval(RA.iv);const e=$('#rf');if(e)e.remove();RA=null;render()}
+const raMsg=R=>R.ok?'✔ Режим загрузчика включён':R.msg||({idle:'Нажми обе кнопки',both:'Держи обе кнопки…',rel:'Отпусти ПИТАНИЕ! RESET – держи',hold:'Держи RESET…'})[R.ph];
+function raPh(R){const s3=R.st===3,g='#7dff9b',c=x=>x?g:'#8890a8',cut=s3&&!R.cab;
+  return`<svg viewBox="0 0 200 150" class="rfp"><rect x="26" y="34" width="148" height="70" rx="12" fill="#0d1224" stroke="#8890a8" stroke-width="4"/><rect x="36" y="44" width="86" height="50" rx="6" fill="${s3?'#000':'#1b2547'}"/>`+
+  (s3?`<rect x="46" y="68" width="66" height="4" rx="2" fill="#333"/><rect x="46" y="68" width="${66*R.fp}" height="4" rx="2" fill="#eee"/>`:`<text x="79" y="74" text-anchor="middle" font-size="12" font-weight="700" fill="${R.ok?g:'#8890a8'}">${R.ok?'FASTBOOT':'ALISA'}</text>`)+
+  `<circle cx="146" cy="54" r="6" fill="${c(R.ok||(s3&&R.cab)||(R.p&&!s3))}"/><circle cx="146" cy="76" r="4" fill="${c(R.v&&!s3)}"/><text x="146" y="94" text-anchor="middle" font-size="8" fill="#8890a8">RESET</text><path d="M100 104V134H60" stroke="${cut?'#ff5a5a':'#8890a8'}" stroke-width="3" fill="none" ${cut?'stroke-dasharray="4 9"':''}/></svg>`}
+function raR(){const R=RA,el=$('#rf');if(!R||!el)return;const v=PGV[R.sel];
+  const T=['','режим загрузчика','выбор образа','запись','привязка Алисы'][R.st],
+  H=['',`Зажми <b>ПИТАНИЕ</b> и <b>RESET</b> вместе на ${sc(R.t1)} сек. Потом отпусти ПИТАНИЕ, а RESET держи ещё ${sc(R.t2)} сек.`,`Найди образ именно для <b>${R.code}</b> (${v[1]}), который подписан производителем.`,'Идёт запись. Если кабель отойдёт, быстро нажми «Переподключить».','Выбери сеть с наклейки (название — буква в букву) и введи код привязки с экрана ТВ.'][R.st];
+  let b='';
+  if(R.st===1)b=raPh(R)+`<div class="rfbar"><i id="rfb"></i></div><div class="rfm" id="rfm">${raMsg(R)}</div><div class="rfbt"><button data-r="p" class="${R.p?'on':''}">⏻ Питание</button><button data-r="v" class="${R.v?'on':''}">RESET</button></div><div class="rfs">Кнопки нажимаются тапом и залипают</div>`;
+  else if(R.st===2)b=`<div class="rfid">${R.code}<small>${nm(R.d)} · ${v[1]}</small></div>${R.msg?`<div class="rfe">${R.msg}</div>`:''}`+R.F.map((f,i)=>`<button class="rff" data-r="fw" data-i="${i}">📦 ${f.n}<span class="${f.k==='old'?'bad':f.k==='beta'?'wr':'ok'}">${f.t}</span></button>`).join('')+`<div class="rfs">Софт: ${f(v[3])} за запись подходящего образа</div>`;
+  else if(R.st===3&&!R.done)b=`<div class="rfban">${R.code} · ${v[1]} — образ подписан ✅</div>`+raPh(R)+(R.fail?`<div class="rfe">${R.brick?'💥 Приставка превратилась в кирпич. ':'❌ '}${R.fail}</div><div class="rfbt">${R.brick?'':'<button data-r="again">↻ Заново</button>'}<button data-r="x">Закрыть</button></div>`:`<div class="rfbar"><i id="rfb" style="width:${R.fp*100}%"></i></div><div class="rfm" style="${R.cab?'':'color:#ff7b7b'}">${R.cab?'Не отключай приставку…':'⚠ Кабель отошёл!'}</div>${R.cab?'':'<div class="rfbt"><button class="on" data-r="cab">🔌 Переподключить кабель</button></div>'}`);
+  else if(R.done)b=`<div class="rfid">🤖<small>${nm(R.d)}: ${v[1]} установлена</small></div><div class="rfm">Цена выросла на ${Math.round(v[2]*100)}%. Приставка готова к продаже.</div><div class="rfbt"><button class="on" data-r="x">Готово</button></div>`;
+  else b='';
+  el.innerHTML=`<div class="rfh"><span>Root Алисы · ${esc(nm(R.d))}</span><button data-r="x">✕</button></div><h4>Шаг ${R.st} из 3 · ${T}</h4><p>${H}</p>${b}<pre class="rfl" id="rfl">${esc(R.log.slice(-7).join('\n'))}</pre>`}
+function raFail(R,msg){if(R.fail)return;const v=PGV[R.sel],d=R.d;R.fail=msg;R.log.push('✗ '+msg);S.skx=(S.skx||0)+1;
+  if(Math.random()<v[8]){R.brick=1;d.broke=1;d.offer=0;S.pgr='💥 '+nm(d)+': приставка превратилась в кирпич';toast('💥 Сбой прошивки: '+nm(d)+' превратилась в кирпич')}
+  else S.pgr='❌ '+nm(d)+': сбой, приставка цела, деньги потрачены';
+  save();raR()}
+function raDone(R){if(R.done)return;const d=R.d,v=PGV[R.sel],lv0=skLv();
+  if(!S.inv.includes(d)){raX();return}
+  d.pg=v[2];d.pgn=v[1];d.pv=R.sel;d.offer=0;d.pu=0;S.skx=(S.skx||0)+v[7];
+  S.pgr='✅ '+nm(d)+': '+v[1]+' установлена, цена +'+Math.round(v[2]*100)+'%';R.done=1;
+  toast('🤖 '+v[1]+' на '+nm(d)+': цена +'+Math.round(v[2]*100)+'% · '+gain(RI(8,14)+v[7]));
+  if(skLv()>lv0)toast('🧠 Навык программирования: ур. '+skLv());
+  save();raR()}
+function raC(e){const t=e.target.closest('[data-r]');if(!t||!RA)return;const R=RA,r=t.dataset.r,i=+t.dataset.i,v=PGV[R.sel];
+  if(r==='x')raX();
+  else if(r==='p'||r==='v'){if(R.st===1&&!R.ok){R[r]=R[r]?0:1;raR()}}
+  else if(r==='fw'){const fw=R.F[i];
+    if(fw.k==='wrong'){R.msg='Образ от '+fw.n.split('_')[0]+'… не для этой модели 😬';R.log.push('✗ Образ от другой модели — запись прервана')}
+    else if(fw.k==='old'){R.msg='Эта версия не подписана — загрузчик откажет (ошибка 0x3194)';R.log.push('✗ Образ не подписан')}
+    else{if(lose(v[3]))return;save();R.fw=fw;R.st=3;R.msg='';R.log=['Образ: '+fw.n]}
+    raR()}
+  else if(r==='cab'){R.cab=1;R.log.push('✔ Кабель переподключён');raR()}
+  else if(r==='net'){R.net=RANET[i];raR()}
+  else if(r==='again'){raReset();raR()}
+  else if(r==='act'){const n=R.net==='Alisa_Setup_5G',p=(R.in||'').replace(/\D/g,'')===R.code4;
+    if(!n||!p){R.msg=!n?'Не та сеть — выбери Alisa_Setup_5G 😬':'Неверный код — смотри на экран ТВ';R.log.push('✗ Привязка не удалась');raR();return}
+    raDone(R)}}
+function raT(){const R=RA;if(!R)return;const n=Date.now(),B=x=>{const b=$('#rfb');if(b)b.style.width=x*100+'%'},rs=m=>{R.ph='idle';R.p=R.v=0;R.msg=m;raR()},v=PGV[R.sel],mm=()=>{const m=$('#rfm');if(m)m.textContent=raMsg(R)};
+  if(R.st===1&&!R.ok){
+    if(R.ph==='idle'){if(R.p&&R.v){R.ph='both';R.t=n;R.msg='';mm()}}
+    else if(R.ph==='both'){if(!(R.p&&R.v))rs('Рано отпустил — начни заново');else{const e=(n-R.t)/R.t1;B(Math.min(1,e));if(e>=1){R.ph='rel';R.t=n;B(1);mm()}}}
+    else if(R.ph==='rel'){if(!R.v)rs('RESET отпущен — заново');else if(!R.p){R.ph='hold';R.t=n;B(0);mm()}else if(n-R.t>5000)rs('Слишком долго держал ПИТАНИЕ — заново')}
+    else if(R.ph==='hold'){if(!R.v)rs('RESET отпущен — заново');else{const e=(n-R.t)/R.t2;B(Math.min(1,e));if(e>=1){R.ok=1;R.log.push('✔ Устройство в режиме загрузчика');raR();setTimeout(()=>{if(RA===R){R.st=2;R.msg='';raR()}},900)}}}
+  }else if(R.st===3&&!R.fail&&!R.done){
+    if(R.cab){R.fp=Math.min(1,R.fp+.1/pgT(v));B(R.fp);const k=Math.floor(R.fp*RALOG.length);let ch=0;while(R.n<k){R.log.push(RALOG[R.n++]);ch=1}if(ch){const l=$('#rfl');if(l)l.textContent=R.log.slice(-7).join('\n')}
+      if(R.fp>=.45&&!R.ev){R.ev=1;R.cab=0;R.et=n;R.log.push('✗ USB-кабель отключён!');raR();return}
+      if(R.fw.k==='beta'&&R.fp>=.85&&!R.bc){R.bc=1;if(Math.random()<.5){raFail(R,'Бета-сборка не прошла проверку (ошибка 0x4005)');return}}
+      if(R.fp>=.9&&!R.vb){R.vb=1;if(R.fw.k!=='beta'&&Math.random()<raFl(v)){raFail(R,'Проверка vbmeta не пройдена (ошибка 0x1F)');return}}
+      if(R.fp>=1&&!R.fail){R.log.push('✔ Запись завершена');raDone(R)}
+    }else if(n-R.et>3000+400*S.pc+200*skLv())raFail(R,'Кабель не переподключён вовремя (ошибка 0xE4)')}}
+
+if(!S){S=fresh();regen()}
+if(!S.mk.some(x=>I[x.dev.key]&&I[x.dev.key][1]>=1e6))elite(1);
+render();
+</script>
+</body>
+</html>
